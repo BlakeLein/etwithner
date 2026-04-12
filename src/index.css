@@ -1,0 +1,54 @@
+:root {
+  --navy: #1B2A4A;
+  --navy-light: #263a5e;
+  --gold: #C8963E;
+  --gold-light: #D4A94F;
+  --gold-soft: rgba(200, 150, 62, 0.1);
+  --sage: #5A7C65;
+  --sage-light: #6B8E76;
+  --cream: #F8F6F1;
+  --cream-dark: #EDE9E0;
+  --charcoal: #2D2D2D;
+  --charcoal-light: #555555;
+  --white: #FFFFFF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: var(--charcoal);
+  background-color: var(--cream);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Georgia', serif;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--navy);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
