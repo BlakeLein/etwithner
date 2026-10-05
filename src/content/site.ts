@@ -36,7 +36,7 @@ export const gate = {
 };
 
 export const site = {
-  name: 'Ember & Pine',
+  name: 'Withner',
   descriptor: 'Cold Brew Coffee',
   tagline: 'Slow-steeped. Small batch. Made for the trail and the porch.',
   intro:
