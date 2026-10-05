@@ -1,4 +1,4 @@
-# Withner Cold Brew: coffee site
+# Evan Withner Cold Brew: coffee site
 
 A one-page, no-checkout website for a small-batch cold brew business: a hero, the story, the products,
 how to order (Venmo, a pickup calendar, text or email), and a light feedback form. A woodsy, elegant-and-rugged
@@ -10,7 +10,7 @@ look: deep forest green, bark brown, warm paper, and a copper ember accent, with
 ## Change the words, products, and links
 
 **Everything is in one file: `src/content/site.ts`.** Right now it is SAMPLE content (a placeholder brand,
-"Withner", and three sample products), so replace:
+"Evan Withner", and three sample products), so replace:
 
 - the **name**, tagline, and story,
 - the **products** (name, one-line description, size, price, tasting notes, and an optional ribbon like "Bestseller"),
