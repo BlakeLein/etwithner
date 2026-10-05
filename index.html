@@ -15,6 +15,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Netlify finds forms by reading the built HTML, and the real feedback form is drawn by React,
+         so this hidden copy tells Netlify the form exists. Keep its field names in step with
+         src/components/Feedback.tsx. -->
+    <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="rating" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

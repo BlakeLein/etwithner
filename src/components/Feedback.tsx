@@ -2,34 +2,56 @@ import { useState, type FormEvent } from 'react';
 import { site } from '../content/site';
 import { Bean, Ornament } from '../art/Art';
 
-// Light feedback with no server: the form fills in an email to the owner and opens the visitor's own
-// email app, so nothing is stored or processed here.
+// Light feedback. On Netlify the form is stored there and emailed to the owner (the hidden copy of the
+// form in index.html is how Netlify finds it). Anywhere else, the post is refused and the visitor is
+// offered their own email app instead, so nothing is ever lost.
 export default function Feedback() {
   const { feedback } = site;
   const [name, setName] = useState('');
   const [rating, setRating] = useState(0);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [opened, setOpened] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
 
-  function submit(event: FormEvent) {
-    event.preventDefault();
-    if (message.trim() === '') {
-      setError('Please write a few words first.');
-      setOpened(false);
-      return;
-    }
-    setError('');
+  function mailtoLink() {
     const lines = [
       message.trim(),
       '',
       rating > 0 ? `Rating: ${rating} of 5` : null,
       name.trim() !== '' ? `From: ${name.trim()}` : null,
     ].filter((line): line is string => line !== null);
-    const subject = encodeURIComponent(`Feedback for ${site.name}`);
-    const body = encodeURIComponent(lines.join('\n'));
-    window.location.href = `mailto:${feedback.to}?subject=${subject}&body=${body}`;
-    setOpened(true);
+    return `mailto:${feedback.to}?subject=${encodeURIComponent(`Feedback for ${site.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`;
+  }
+
+  async function submit(event: FormEvent) {
+    event.preventDefault();
+    if (message.trim() === '') {
+      setError('Please write a few words first.');
+      return;
+    }
+    setError('');
+    setStatus('sending');
+    try {
+      const body = new URLSearchParams({
+        'form-name': 'feedback',
+        'bot-field': '',
+        name: name.trim(),
+        rating: rating > 0 ? String(rating) : '',
+        message: message.trim(),
+      });
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+      if (!response.ok) throw new Error('not ok');
+      setStatus('sent');
+      setName('');
+      setRating(0);
+      setMessage('');
+    } catch {
+      setStatus('failed');
+    }
   }
 
   return (
@@ -71,13 +93,17 @@ export default function Feedback() {
               {error}
             </p>
           )}
-          <button type="submit" className="btn btn-ember">
-            Send feedback
+          <button type="submit" className="btn btn-ember" disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send feedback'}
           </button>
-          {opened && (
+          {status === 'sent' && (
             <p className="form-ok" role="status">
-              Your email app should open with your note ready to send. If it does not, write to{' '}
-              <a href={`mailto:${feedback.to}`}>{feedback.to}</a>.
+              Thank you! Your note is on its way.
+            </p>
+          )}
+          {status === 'failed' && (
+            <p className="form-error" role="alert">
+              That did not go through. <a href={mailtoLink()}>Send it by email instead</a>.
             </p>
           )}
         </form>

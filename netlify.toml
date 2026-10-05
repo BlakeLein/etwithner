@@ -1,0 +1,7 @@
+# Build settings for Netlify (https://netlify.com). Netlify reads this, so nothing needs typing into its UI.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
