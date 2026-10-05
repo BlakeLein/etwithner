@@ -9,7 +9,10 @@ export default function Footer() {
         {site.name} <span>{site.descriptor}</span>
       </p>
       <p className="footer-note">{site.footer.note}</p>
-      <p className="footer-copy">&copy; {new Date().getFullYear()} {site.name}</p>
+      <p className="footer-copy">
+        &copy; {new Date().getFullYear()} {site.name}
+        {site.maker && ` · ${site.maker}`}
+      </p>
     </footer>
   );
 }

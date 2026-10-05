@@ -36,7 +36,9 @@ export const gate = {
 };
 
 export const site = {
-  name: 'Evan Withner',
+  name: 'Ember & Pine',
+  // The person behind the brand, credited in the hero, the story, and the footer. Blank to leave off.
+  maker: 'Evan Withner',
   descriptor: 'Cold Brew Coffee',
   tagline: 'Slow-steeped. Small batch. Made for the trail and the porch.',
   intro:

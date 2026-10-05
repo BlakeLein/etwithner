@@ -6,7 +6,9 @@ export default function Hero() {
     <section className="hero" id="top">
       <div className="hero-glow" aria-hidden="true" />
       <div className="hero-inner">
-        <p className="kicker">Small-batch cold brew</p>
+        <p className="kicker">
+          Small-batch cold brew{site.maker && ` by ${site.maker}`}
+        </p>
         <h1>
           {site.name}
           <span className="hero-descriptor">{site.descriptor}</span>

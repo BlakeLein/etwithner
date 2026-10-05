@@ -14,6 +14,7 @@ export default function Story() {
             {paragraph}
           </p>
         ))}
+        {site.maker && <p className="story-sign">Brewed by {site.maker}</p>}
       </div>
       <div className="wrap highlights">
         {story.highlights.map((item) => (

@@ -120,6 +120,7 @@ h2.light { color: var(--cream); }
 
 /* ── Story ──────────────────────────────────── */
 .story-text { font-size: 1.12rem; color: var(--ink-soft); }
+.story-sign { font-style: italic; color: var(--ember-dark); margin-top: 1.4rem; }
 .highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 3rem; }
 .highlight { text-align: center; padding: 1.5rem 1rem; border-top: 2px solid var(--ember); }
 .highlight h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
