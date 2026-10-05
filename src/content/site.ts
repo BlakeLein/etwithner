@@ -25,6 +25,16 @@ export interface OrderLink {
   url: string;
 }
 
+// While the site is under development it sits behind a simple password page. This is a casual
+// "keep the curious out" gate, not real security: the password is in the page's own code, so anyone
+// who looks at the source can read it. Set `enabled` to false (and delete the noindex line in
+// index.html) when the site is ready to be public.
+export const gate = {
+  enabled: false,
+  password: 'etwithner2026',
+  storageKey: 'etwithner_auth',
+};
+
 export const site = {
   name: 'Ember & Pine',
   descriptor: 'Cold Brew Coffee',

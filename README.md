@@ -22,6 +22,13 @@ look: deep forest green, bark brown, warm paper, and a copper ember accent, with
 The Venmo and calendar links are generic placeholders (venmo.com and calendar.google.com), and the email is the reserved
 `hello@example.com`, so nothing points at a real account until they are replaced.
 
+## Password page (while under development)
+
+The site has a simple password page that is currently OFF (`gate.enabled` is false); the page also tells search engines not to index it (the `noindex` line in `index.html`, to delete once real content is in). The password and the
+on/off switch are in `src/content/site.ts` (`gate`). It is a casual gate, not real security: the password is in the
+page's own code, so anyone who views the source can read it. **To go public:** set `gate.enabled` to `false` and
+delete the `noindex` line in `index.html`.
+
 ## Feedback
 
 The form fills in an email to `feedback.to` and opens the visitor's own email app, so there is no server and
