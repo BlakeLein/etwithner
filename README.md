@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# Ember & Pine: cold brew coffee site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A one-page, no-checkout website for a small-batch cold brew business: a hero, the story, the products,
+how to order (Venmo, a pickup calendar, text or email), and a light feedback form. A woodsy, elegant-and-rugged
+look: deep forest green, bark brown, warm paper, and a copper ember accent, with a pine-ridge illustration.
 
-Currently, two official plugins are available:
+> This repo used to be a financial-advisory demo (E.T. Withner). It was replaced with this site, keeping the
+> same hosting and deploy (`etwithner.blakelein.com`, auto-deploy on push to `main`).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Change the words, products, and links
 
-## React Compiler
+**Everything is in one file: `src/content/site.ts`.** Right now it is SAMPLE content (a placeholder brand,
+"Ember & Pine", and three sample products), so replace:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- the **name**, tagline, and story,
+- the **products** (name, one-line description, size, price, tasting notes, and an optional ribbon like "Bestseller"),
+- the **order links** (`order.links`): the Venmo link (`https://venmo.com/u/THE-HANDLE`), the pickup calendar link
+  (a Google Calendar appointment page, Calendly, or any booking link), a text number (`sms:+15551234567`) and an
+  email (`mailto:...`). **A link with an empty `url` is left off the page**,
+- the **feedback address** (`feedback.to`).
 
-## Expanding the ESLint configuration
+The Venmo and calendar links are generic placeholders (venmo.com and calendar.google.com), and the email is the reserved
+`hello@example.com`, so nothing points at a real account until they are replaced.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Feedback
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The form fills in an email to `feedback.to` and opens the visitor's own email app, so there is no server and
+nothing is stored. If the owner later wants responses collected in one place, swap the form's submit handler
+(`src/components/Feedback.tsx`) for a form service or a small backend.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Look and feel
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Colors, fonts, and textures are variables at the top of `src/index.css` (`--ember`, `--paper`, `--forest-*`, ...).
+The illustrations (pine ridge, bottle, coffee bean, divider) are inline SVG in `src/art/Art.tsx`; there are no image
+files. Fonts are system serif and sans stacks (no downloads). The paper grain is a tiny inline SVG filter.
+
+## Run it
+
+```
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # type-check and build to dist/
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deploying
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Pushing to `main` runs `.github/workflows/deploy.yml`: it SSHes to the server, pulls, and runs `npm install` and
+`npm run build` there (nginx serves `dist/`). That builds on the server itself, which has little memory; if hosting
+moves, prefer building in CI and uploading `dist/` (the pattern the larger sites use). The site has no backend and no
+environment variables, so it can be hosted anywhere that serves static files.

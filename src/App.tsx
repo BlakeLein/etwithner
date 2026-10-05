@@ -1,48 +1,28 @@
-import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import PasswordGate from './components/PasswordGate'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Schedule from './pages/Schedule'
-import './App.css'
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Story from './components/Story';
+import Products from './components/Products';
+import Order from './components/Order';
+import Feedback from './components/Feedback';
+import Footer from './components/Footer';
 
-const SITE_PASSWORD = 'etwithner2026'
-
-function App() {
-  const [authenticated, setAuthenticated] = useState(() => {
-    return sessionStorage.getItem('etwithner_auth') === 'true'
-  })
-
-  const handleAuth = (password: string): boolean => {
-    if (password === SITE_PASSWORD) {
-      sessionStorage.setItem('etwithner_auth', 'true')
-      setAuthenticated(true)
-      return true
-    }
-    return false
-  }
-
-  if (!authenticated) {
-    return <PasswordGate onAuth={handleAuth} />
-  }
-
+// One page, top to bottom: hero, story, the brews, how to order, feedback. All the words and links
+// are in src/content/site.ts.
+export default function App() {
   return (
-    <div className="app">
+    <>
+      <a className="skip" href="#brews">
+        Skip to the brews
+      </a>
       <Navbar />
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/schedule" element={<Schedule />} />
-        </Routes>
+      <main>
+        <Hero />
+        <Story />
+        <Products />
+        <Order />
+        <Feedback />
       </main>
       <Footer />
-    </div>
-  )
+    </>
+  );
 }
-
-export default App
