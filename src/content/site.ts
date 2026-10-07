@@ -25,10 +25,10 @@ export interface PickupWindow {
 }
 
 export interface PaymentMethod {
-  id: 'venmo' | 'cashapp' | 'paypal' | 'zelle';
+  id: 'venmo' | 'zelle' | 'cash';
   label: string;
-  // The account to pay: the Venmo username (no @), the Cash App cashtag (no $), the PayPal.Me name, or
-  // the email/phone number registered with Zelle (Zelle has no pay link, so buyers are shown it instead).
+  // The account to pay: the Venmo username (no @) or the email/phone number registered with Zelle (Zelle
+  // has no pay link, so buyers are shown it). Cash has none.
   handle: string;
 }
 
@@ -89,17 +89,27 @@ export const site = {
       { id: 'saturday-afternoon', label: 'Saturday afternoon (12-5 PM)' },
       { id: 'sunday-afternoon', label: 'Sunday afternoon (1-5 PM)' },
     ] as PickupWindow[],
-    // How buyers pay. With only one, the "payment type" step is skipped. MOCK-UP: only the Venmo handle is
-    // real; the others are placeholders. Delete a line to drop that option (or all but one to drop the step).
+    // How buyers pay. With only one, the "payment type" step is skipped. Venmo opens a pay screen; Zelle shows
+    // the buyer where to send it; Cash is brought to pick-up. Venmo and Zelle accounts are the real ones.
     payments: [
       { id: 'venmo', label: 'Venmo', handle: 'etwithner' },
-      { id: 'cashapp', label: 'Cash App', handle: 'etwithner' },
-      { id: 'paypal', label: 'PayPal', handle: 'etwithner' },
-      { id: 'zelle', label: 'Zelle', handle: 'hello@example.com' },
+      { id: 'zelle', label: 'Zelle', handle: 'etwithner@gmail.com' },
+      { id: 'cash', label: 'Cash', handle: '' },
     ] as PaymentMethod[],
   },
 
-  // The "About me" section between the product and ordering. SAMPLE words: replace with the real story.
+  // How to serve it, between the story and the product.
+  enjoy: {
+    title: 'How to enjoy cold brew from Withner Coffee Co.',
+    steps: [
+      'Fill an 8 oz cup with ice',
+      'Add 1 oz of cold brew',
+      'Add 3 oz of water',
+      'Adjust to your taste preference',
+    ],
+  },
+
+  // The "About me" section after it, before ordering. SAMPLE words: replace with the real story.
   about: {
     title: 'About me',
     paragraphs: [

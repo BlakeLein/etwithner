@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 // Fades and lifts each part of the page into view as it scrolls on screen. Items inside a grid (the
 // product cards, steps, and so on) arrive one after another. Does nothing when the visitor prefers
 // reduced motion, so everything is simply visible. Styles are under "Scroll reveal" in index.css.
-const GRIDS = '.products';
+const GRIDS = '.products, .enjoy-steps';
 
 export default function useScrollReveal(enabled: boolean) {
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function useScrollReveal(enabled: boolean) {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+      { threshold: 0, rootMargin: '0px 0px 6% 0px' },
     );
 
     for (const el of targets) {

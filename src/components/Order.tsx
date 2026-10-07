@@ -1,20 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { site, type PaymentMethod } from '../content/site';
 import { Ornament } from '../art/Art';
 
-// Where to send the buyer to pay, with the amount (and a note, where the app allows one) already filled in.
-// Zelle has no pay link, so it returns null and the buyer is shown who to send the money to.
+// The Venmo pay screen for the owner's account, with the amount and a note already filled in. Zelle and cash
+// have no pay link, so they return null and the confirmation shows instructions instead.
 function paymentUrl(method: PaymentMethod, amount: number, note: string): string | null {
-  switch (method.id) {
-    case 'venmo':
-      return `https://venmo.com/${method.handle}?txn=pay&amount=${amount}&note=${encodeURIComponent(note)}`;
-    case 'cashapp':
-      return `https://cash.app/$${method.handle}/${amount}`;
-    case 'paypal':
-      return `https://paypal.me/${method.handle}/${amount}USD`;
-    case 'zelle':
-      return null;
-  }
+  if (method.id !== 'venmo') return null;
+  return `https://venmo.com/${method.handle}?txn=pay&amount=${amount}&note=${encodeURIComponent(note)}`;
 }
 
 function dollars(amount: number) {
@@ -23,18 +15,25 @@ function dollars(amount: number) {
 
 // A light checkout: pick a quantity, enter contact info, choose a payment type and a pickup window, then
 // submit. On Netlify the order is stored there and emailed to the owner (the hidden copy of the form in
-// index.html is how Netlify finds it), and the buyer is sent on to pay. Anywhere else the post is refused
-// and the buyer is shown a link to email the order instead, so nothing is lost.
+// index.html is how Netlify finds it), and a confirmation pops up with how to pay. Anywhere else the post is
+// refused and the buyer is shown a link to email the order instead, so nothing is lost.
 export default function Order() {
   const { order } = site;
-  const [quantity, setQuantity] = useState(1);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [pickup, setPickup] = useState('');
-  const [paymentId, setPaymentId] = useState(order.payments[0].id);
+  // Opening the page with ?test=1 shows the confirmation with sample details (add &payment=zelle or
+  // &payment=cash to see those versions). Nothing is sent.
+  const params = new URLSearchParams(window.location.search);
+  const testing = params.get('test') === '1';
+  const testPayment = order.payments.find((method) => method.id === params.get('payment'));
+  const [quantity, setQuantity] = useState(testing ? 2 : 1);
+  const [name, setName] = useState(testing ? 'Test Tester' : '');
+  const [email, setEmail] = useState(testing ? 'test@example.com' : '');
+  const [phone, setPhone] = useState(testing ? '(555) 555-0123' : '');
+  const [pickup, setPickup] = useState(testing ? order.pickupWindows[0].id : '');
+  const [paymentId, setPaymentId] = useState((testing && testPayment ? testPayment : order.payments[0]).id);
   const [error, setError] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>(testing ? 'sent' : 'idle');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const submitRef = useRef<HTMLButtonElement>(null);
 
   const total = quantity * order.unitPrice;
   const payment = order.payments.find((method) => method.id === paymentId) ?? order.payments[0];
@@ -43,7 +42,8 @@ export default function Order() {
   const summary = `${quantity} x ${order.itemLabel}`;
   const note = `${site.name}: ${summary}, pickup ${pickupLabel} (${name.trim()})`;
   const payUrl = paymentUrl(payment, total, note);
-  const zelleHow = `send ${dollars(total)} with Zelle to ${payment.handle} and put your name in the memo`;
+  const isCash = payment.id === 'cash';
+  const open = status === 'sent';
 
   function mailtoLink() {
     const lines = [
@@ -56,6 +56,50 @@ export default function Order() {
     ];
     return `mailto:${site.contact.to}?subject=${encodeURIComponent(`New order: ${summary} (${dollars(total)})`)}&body=${encodeURIComponent(lines.join('\n'))}`;
   }
+
+  function closeModal() {
+    setStatus('idle');
+    setQuantity(1);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setPickup('');
+    setPaymentId(order.payments[0].id);
+    submitRef.current?.focus();
+  }
+
+  // While the confirmation is open: lock the page scroll, focus the dialog, close on Escape, keep Tab inside.
+  useEffect(() => {
+    if (!open) return;
+    const dialog = dialogRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog?.focus();
+    function onKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialog) return;
+      const items = Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button'));
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -85,7 +129,6 @@ export default function Order() {
       });
       if (!response.ok) throw new Error('not ok');
       setStatus('sent');
-      if (payUrl) window.location.href = payUrl;
     } catch {
       setStatus('failed');
     }
@@ -166,7 +209,7 @@ export default function Order() {
           <fieldset className="check-step">
             <legend>
               <span className="step-num" aria-hidden="true">{nextStep()}</span>
-              Pickup time
+              Preferred pickup window
             </legend>
             <div className="choices">
               {order.pickupWindows.map((window) => (
@@ -186,37 +229,78 @@ export default function Order() {
                   {error}
                 </p>
               )}
-              <button type="submit" className="btn btn-primary" disabled={status === 'sending' || status === 'sent'}>
-                {status === 'sending' ? 'Sending…' : status === 'sent' ? (payUrl ? 'Taking you to pay…' : 'Order sent') : `Submit order and pay ${dollars(total)}`}
+              <button ref={submitRef} type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending…' : `Submit and move on to ${dollars(total)} payment`}
               </button>
-              {status === 'sent' && (
-                <p className="form-ok" role="status">
-                  {payUrl ? (
-                    <>
-                      Order sent! If nothing happens, <a href={payUrl}>pay with {payment.label} here</a>.
-                    </>
-                  ) : (
-                    <>Order sent! {zelleHow[0].toUpperCase() + zelleHow.slice(1)}.</>
-                  )}
-                </p>
-              )}
               {status === 'failed' && (
                 <p className="form-error" role="alert">
-                  We couldn&rsquo;t send your order automatically. <a href={mailtoLink()}>Email it to us</a>, then{' '}
-                  {payUrl ? (
-                    <a href={payUrl} target="_blank" rel="noopener noreferrer">
-                      pay with {payment.label}
-                    </a>
-                  ) : (
-                    zelleHow
-                  )}
-                  .
+                  We couldn&rsquo;t send your order automatically. <a href={mailtoLink()}>Email it to us</a>.
                 </p>
               )}
             </div>
           </div>
         </form>
       </div>
+      {open && (
+        <div className="modal-backdrop" onClick={closeModal}>
+          <div
+            ref={dialogRef}
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="order-modal-title"
+            tabIndex={-1}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button type="button" className="modal-close" onClick={closeModal} aria-label="Close">
+              &times;
+            </button>
+            <h3 id="order-modal-title">Thank you! There is only one more step.</h3>
+            <p>
+              {isCash
+                ? 'We received your order! Please bring your payment with you to pick-up. We will reach out to you to finalize your pick-up time.'
+                : 'We received your order! Please follow the instructions below to complete your payment. Once we receive your payment, we will reach out to you to finalize your pick-up time.'}
+            </p>
+            <dl className="modal-details">
+              <dt>Name</dt>
+              <dd>{name.trim()}</dd>
+              <dt>Email</dt>
+              <dd>{email.trim()}</dd>
+              <dt>Phone</dt>
+              <dd>{phone.trim()}</dd>
+              <dt>Order</dt>
+              <dd>{summary}</dd>
+              <dt>Preferred Pick-up Window</dt>
+              <dd>{pickupLabel}</dd>
+              <dt>Payment</dt>
+              <dd>{payment.label}</dd>
+              <dt>Total</dt>
+              <dd className="modal-total">{dollars(total)}</dd>
+            </dl>
+            {payUrl && (
+              <a className="btn btn-primary" href={payUrl} target="_blank" rel="noopener noreferrer">
+                Pay {dollars(total)} with Venmo
+              </a>
+            )}
+            {payment.id === 'zelle' && (
+              <div className="modal-pay">
+                <p>
+                  Send <strong>{dollars(total)}</strong> with Zelle to
+                </p>
+                <p className="modal-handle">{payment.handle}</p>
+                <p>Put your name in the memo.</p>
+              </div>
+            )}
+            {isCash && (
+              <div className="modal-pay">
+                <p>
+                  Bring <strong>{dollars(total)}</strong> in cash to your pick-up.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
