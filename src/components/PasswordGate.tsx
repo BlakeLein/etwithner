@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { site } from '../content/site';
-import { PineIcon } from '../art/Art';
+import { LogoIcon } from '../art/Art';
 
 // The "under development" password page (see `gate` in src/content/site.ts).
 export default function PasswordGate({ onAuth }: { onAuth: (password: string) => boolean }) {
@@ -18,8 +18,8 @@ export default function PasswordGate({ onAuth }: { onAuth: (password: string) =>
   return (
     <main className="gate">
       <form className="gate-card" onSubmit={submit}>
-        <PineIcon size={34} />
-        <h1>{site.name}</h1>
+        <LogoIcon height={52} />
+        <h1 className="logo-word">{site.name}</h1>
         <p className="gate-sub">{site.descriptor}</p>
         <p className="gate-note">This site is currently under development.</p>
         <label className="sr-only" htmlFor="gate-password">
@@ -42,7 +42,7 @@ export default function PasswordGate({ onAuth }: { onAuth: (password: string) =>
             Incorrect password
           </p>
         )}
-        <button type="submit" className="btn btn-ember">
+        <button type="submit" className="btn btn-primary">
           Enter
         </button>
       </form>

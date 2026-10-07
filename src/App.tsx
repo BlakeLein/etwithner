@@ -5,11 +5,13 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Story from './components/Story';
 import Products from './components/Products';
+import About from './components/About';
 import Order from './components/Order';
 import Feedback from './components/Feedback';
 import Footer from './components/Footer';
+import useScrollReveal from './hooks/useScrollReveal';
 
-// One page, top to bottom: hero, story, the brews, how to order, feedback. All the words and links
+// One page, top to bottom: hero, story, the brews, about me, how to order, feedback. All the words and links
 // are in src/content/site.ts.
 export default function App() {
   const [authenticated, setAuthenticated] = useState(
@@ -23,6 +25,8 @@ export default function App() {
     return true;
   }
 
+  useScrollReveal(authenticated);
+
   if (!authenticated) return <PasswordGate onAuth={handleAuth} />;
 
   return (
@@ -35,6 +39,7 @@ export default function App() {
         <Hero />
         <Story />
         <Products />
+        <About />
         <Order />
         <Feedback />
       </main>

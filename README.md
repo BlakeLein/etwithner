@@ -1,8 +1,8 @@
-# Ember & Pine: cold brew coffee site
+# Withner Coffee Co.: cold brew coffee site
 
 A one-page, no-checkout website for a small-batch cold brew business: a hero, the story, the products,
-how to order (Venmo, a pickup calendar, text or email), and a light feedback form. A woodsy, elegant-and-rugged
-look: deep forest green, bark brown, warm paper, and a copper ember accent, with a pine-ridge illustration.
+how to order (Venmo, a pickup calendar, text or email), and a light feedback form. A modern, minimal look: lots of
+white, black type, and three bright colors (coral, blue, yellow), with flat drink illustrations.
 
 > This repo used to be a financial-advisory demo (E.T. Withner). It was replaced with this site, keeping the
 > same hosting and deploy (`etwithner.blakelein.com`, auto-deploy on push to `main`).
@@ -10,7 +10,7 @@ look: deep forest green, bark brown, warm paper, and a copper ember accent, with
 ## Change the words, products, and links
 
 **Everything is in one file: `src/content/site.ts`.** Right now it is SAMPLE content (a placeholder brand,
-"Ember & Pine", and three sample products), so replace:
+"Withner Coffee Co.", and three sample products), so replace:
 
 - the **name**, tagline, and story,
 - the **products** (name, one-line description, size, price, tasting notes, and an optional ribbon like "Bestseller"),
@@ -37,9 +37,9 @@ nothing is stored. If the owner later wants responses collected in one place, sw
 
 ## Look and feel
 
-Colors, fonts, and textures are variables at the top of `src/index.css` (`--ember`, `--paper`, `--forest-*`, ...).
-The illustrations (pine ridge, bottle, coffee bean, divider) are inline SVG in `src/art/Art.tsx`; there are no image
-files. Fonts are system serif and sans stacks (no downloads). The paper grain is a tiny inline SVG filter.
+Colors and fonts are variables at the top of `src/index.css` (`--coral`, `--blue`, `--yellow`, `--ink`, ...).
+The illustrations (glasses, jug, coffee bean, dots) are inline SVG in `src/art/Art.tsx`; there are no image
+files. Fonts are a system sans stack (no downloads).
 
 ## Run it
 

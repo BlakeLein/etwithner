@@ -6,9 +6,9 @@ export default function Order() {
   // A link with no address is left off.
   const links = order.links.filter((link) => link.url.trim() !== '');
   return (
-    <section className="section paper" id="order">
+    <section className="section tint" id="order">
       <div className="wrap">
-        <p className="kicker kicker-dark">Order</p>
+        <p className="kicker">Order</p>
         <h2>{order.title}</h2>
         <Ornament />
         <p className="lede">{order.intro}</p>

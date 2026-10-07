@@ -55,12 +55,12 @@ export default function Feedback() {
   }
 
   return (
-    <section className="section dark" id="feedback">
+    <section className="section bold" id="feedback">
       <div className="wrap narrow">
         <p className="kicker">Feedback</p>
-        <h2 className="light">{feedback.title}</h2>
+        <h2>{feedback.title}</h2>
         <Ornament />
-        <p className="lede light">{feedback.intro}</p>
+        <p className="lede">{feedback.intro}</p>
         <form className="card-form" onSubmit={submit} noValidate>
           <label className="field">
             <span>Your name (optional)</span>
@@ -93,7 +93,7 @@ export default function Feedback() {
               {error}
             </p>
           )}
-          <button type="submit" className="btn btn-ember" disabled={status === 'sending'}>
+          <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Send feedback'}
           </button>
           {status === 'sent' && (

@@ -1,22 +1,26 @@
 import { site } from '../content/site';
-import { Bottle, Ornament } from '../art/Art';
+import { Glass, Jug, Ornament } from '../art/Art';
 
 // A different label color on each card, so the lineup is easy to tell apart.
-const ACCENTS = ['var(--ember)', 'var(--moss)', 'var(--bark-light)'];
+const ACCENTS = ['var(--teal)', 'var(--yellow)', 'var(--coral)'];
 
 export default function Products() {
   return (
-    <section className="section dark" id="brews">
+    <section className="section tint" id="brews">
       <div className="wrap">
         <p className="kicker">The brews</p>
-        <h2 className="light">What we pour</h2>
+        <h2>What we pour</h2>
         <Ornament />
         <div className="products">
           {site.products.map((product, index) => (
             <article key={product.id} className="product">
               {product.badge && <span className="ribbon">{product.badge}</span>}
               <div className="product-art">
-                <Bottle accent={ACCENTS[index % ACCENTS.length]} />
+                {product.art === 'jug' ? (
+                  <Jug accent={ACCENTS[index % ACCENTS.length]} />
+                ) : (
+                  <Glass accent={ACCENTS[index % ACCENTS.length]} />
+                )}
               </div>
               <div className="product-body">
                 <h3>{product.name}</h3>
@@ -35,7 +39,7 @@ export default function Products() {
           ))}
         </div>
         <p className="center-note">
-          <a className="btn btn-ember" href="#order">
+          <a className="btn btn-primary" href="#order">
             Ready to order
           </a>
         </p>

@@ -16,6 +16,8 @@ export interface Product {
   notes: string[];
   // A small ribbon on the card, like "Bestseller". Optional.
   badge?: string;
+  // Which drawing to show on the card: a glass (the default) or a jug.
+  art?: 'glass' | 'jug';
 }
 
 export interface OrderLink {
@@ -36,19 +38,21 @@ export const gate = {
 };
 
 export const site = {
-  name: 'Ember & Pine',
+  name: 'Withner Coffee Co.',
   // The person behind the brand, credited in the hero, the story, and the footer. Blank to leave off.
   maker: 'Evan Withner',
-  descriptor: 'Cold Brew Coffee',
-  tagline: 'Slow-steeped. Small batch. Made for the trail and the porch.',
+  descriptor: 'Cold Brew',
+  // The thin colored bar above the navigation. Blank to leave off.
+  announcement: '',
+  tagline: 'Slow-steeped. Small batch. Smooth every time.',
   intro:
-    'Cold brew steeped for eighteen hours, bottled by hand, and poured with a little respect for the outdoors.',
+    'Cold brew steeped for eighteen hours, bottled by hand, and made to be poured over ice.',
 
   story: {
     title: 'Steeped slow, made simple',
     paragraphs: [
       'We steep coarse-ground beans in cold water for eighteen hours, strain them twice, and bottle every batch by hand. The result is smooth, low in acid, and strong enough to start a long day, with none of the bitterness.',
-      'No shortcuts and no syrups, just good beans, clean water, and time. Pour it over ice, stir in a little cream, or take it straight from the cooler at the trailhead.',
+      'No shortcuts and no syrups, just good beans, clean water, and time. Pour it over ice, stir in a little cream, or drink it straight from the bottle.',
     ],
     highlights: [
       { title: 'Eighteen-hour steep', text: 'Time does the work, so the flavor comes out round and sweet.' },
@@ -59,8 +63,8 @@ export const site = {
 
   products: [
     {
-      id: 'trailhead',
-      name: 'The Trailhead',
+      id: 'original',
+      name: 'The Original',
       tagline: 'Our original black cold brew.',
       size: '16 oz bottle',
       price: '$6',
@@ -68,18 +72,19 @@ export const site = {
       badge: 'Bestseller',
     },
     {
-      id: 'campfire',
-      name: 'Campfire',
-      tagline: 'Cold brew with vanilla bean and a hint of smoke.',
+      id: 'vanilla',
+      name: 'Vanilla Bean',
+      tagline: 'Cold brew with real vanilla bean and a little caramel.',
       size: '16 oz bottle',
       price: '$7',
-      notes: ['Vanilla bean', 'Caramel', 'Warm and toasty'],
+      notes: ['Vanilla bean', 'Caramel', 'Silky'],
     },
     {
       id: 'big-pour',
       name: 'The Big Pour',
-      tagline: 'Half a gallon for the whole camp, or the whole week.',
+      tagline: 'Half a gallon for the whole crew, or the whole week.',
       size: '64 oz jug',
+      art: 'jug',
       price: '$22',
       notes: ['Same smooth brew', 'Best value', 'Keeps a week cold'],
     },
@@ -121,6 +126,15 @@ export const site = {
     ] as OrderLink[],
   },
 
+  // The "About me" section between the brews and ordering. SAMPLE words: replace with the real story.
+  about: {
+    title: 'About me',
+    paragraphs: [
+      'Hi, I am Evan. Cold brew started as a weekend habit in our kitchen and turned into something I could not stop tinkering with: a different grind, a longer steep, one more taste test with the family.',
+      'Now I make every batch myself, a little at a time, and I love handing someone a bottle and hearing what they thought. Thank you for supporting a small, family-run coffee business.',
+    ],
+  },
+
   feedback: {
     title: 'Tell us how it went',
     intro: 'Loved it? Want something different? A quick note helps us brew better.',
@@ -131,5 +145,6 @@ export const site = {
 
   footer: {
     note: 'Brewed in small batches. Poured with care.',
+    tag: 'Brewed by the Withner Family in Jersey Village, Texas',
   },
 };

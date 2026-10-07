@@ -4,9 +4,9 @@ import { Ornament } from '../art/Art';
 export default function Story() {
   const { story } = site;
   return (
-    <section className="section paper" id="story">
+    <section className="section white" id="story">
       <div className="wrap narrow">
-        <p className="kicker kicker-dark">Our brew</p>
+        <p className="kicker">Our brew</p>
         <h2>{story.title}</h2>
         <Ornament />
         {story.paragraphs.map((paragraph) => (
@@ -14,7 +14,6 @@ export default function Story() {
             {paragraph}
           </p>
         ))}
-        {site.maker && <p className="story-sign">Brewed by {site.maker}</p>}
       </div>
       <div className="wrap highlights">
         {story.highlights.map((item) => (
