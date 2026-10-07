@@ -1,42 +1,37 @@
 import { useState, type FormEvent } from 'react';
 import { site } from '../content/site';
-import { Bean, Ornament } from '../art/Art';
+import { Ornament } from '../art/Art';
 
-// Light feedback. On Netlify the form is stored there and emailed to the owner (the hidden copy of the
-// form in index.html is how Netlify finds it). Anywhere else, the post is refused and the visitor is
-// offered their own email app instead, so nothing is ever lost.
-export default function Feedback() {
-  const { feedback } = site;
+// A simple contact form. On Netlify the form is stored there and emailed to the owner (the hidden copy of
+// the form in index.html is how Netlify finds it). Anywhere else, the post is refused and the visitor is
+// offered their own email app instead, so a message is never lost.
+export default function Contact() {
+  const { contact } = site;
   const [name, setName] = useState('');
-  const [rating, setRating] = useState(0);
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
 
   function mailtoLink() {
-    const lines = [
-      message.trim(),
-      '',
-      rating > 0 ? `Rating: ${rating} of 5` : null,
-      name.trim() !== '' ? `From: ${name.trim()}` : null,
-    ].filter((line): line is string => line !== null);
-    return `mailto:${feedback.to}?subject=${encodeURIComponent(`Feedback for ${site.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    const lines = [message.trim(), '', `From: ${name.trim()} <${email.trim()}>`];
+    return `mailto:${contact.to}?subject=${encodeURIComponent(`Message for ${site.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`;
   }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (message.trim() === '') {
-      setError('Please write a few words first.');
+    if (name.trim() === '' || !/^\S+@\S+\.\S+$/.test(email.trim()) || message.trim() === '') {
+      setError('Please add your name, a valid email, and a message.');
       return;
     }
     setError('');
     setStatus('sending');
     try {
       const body = new URLSearchParams({
-        'form-name': 'feedback',
+        'form-name': 'contact',
         'bot-field': '',
         name: name.trim(),
-        rating: rating > 0 ? String(rating) : '',
+        email: email.trim(),
         message: message.trim(),
       });
       const response = await fetch('/', {
@@ -47,7 +42,7 @@ export default function Feedback() {
       if (!response.ok) throw new Error('not ok');
       setStatus('sent');
       setName('');
-      setRating(0);
+      setEmail('');
       setMessage('');
     } catch {
       setStatus('failed');
@@ -55,37 +50,23 @@ export default function Feedback() {
   }
 
   return (
-    <section className="section bold" id="feedback">
+    <section className="section bold" id="contact">
       <div className="wrap narrow">
-        <p className="kicker">Feedback</p>
-        <h2>{feedback.title}</h2>
+        <p className="kicker">Contact</p>
+        <h2>{contact.title}</h2>
         <Ornament />
-        <p className="lede">{feedback.intro}</p>
+        <p className="lede">{contact.intro}</p>
         <form className="card-form" onSubmit={submit} noValidate>
           <label className="field">
-            <span>Your name (optional)</span>
+            <span>Your name</span>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
           </label>
-          <fieldset className="rating">
-            <legend>How was it?</legend>
-            <div className="beans">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <label key={value} className="bean">
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={value}
-                    checked={rating === value}
-                    onChange={() => setRating(value)}
-                  />
-                  <Bean filled={value <= rating} />
-                  <span className="sr-only">{value} of 5</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
           <label className="field">
-            <span>Your note</span>
+            <span>Your email</span>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+          </label>
+          <label className="field">
+            <span>Your message</span>
             <textarea rows={5} value={message} onChange={(e) => setMessage(e.target.value)} aria-invalid={error !== ''} />
           </label>
           {error && (
@@ -94,11 +75,11 @@ export default function Feedback() {
             </p>
           )}
           <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
-            {status === 'sending' ? 'Sending…' : 'Send feedback'}
+            {status === 'sending' ? 'Sending…' : 'Send message'}
           </button>
           {status === 'sent' && (
             <p className="form-ok" role="status">
-              Thank you! Your note is on its way.
+              Thank you! Your message is on its way.
             </p>
           )}
           {status === 'failed' && (

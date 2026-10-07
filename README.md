@@ -1,7 +1,7 @@
 # Withner Coffee Co.: cold brew coffee site
 
 A one-page, no-checkout website for a small-batch cold brew business: a hero, the story, the products,
-how to order (Venmo, a pickup calendar, text or email), and a light feedback form. A modern, minimal look: lots of
+how to order (Venmo and a pickup calendar), and a contact form. A modern, minimal look: lots of
 white, black type, and three bright colors (coral, blue, yellow), with flat drink illustrations.
 
 > This repo used to be a financial-advisory demo (E.T. Withner). It was replaced with this site, keeping the
@@ -10,17 +10,12 @@ white, black type, and three bright colors (coral, blue, yellow), with flat drin
 ## Change the words, products, and links
 
 **Everything is in one file: `src/content/site.ts`.** Right now it is SAMPLE content (a placeholder brand,
-"Withner Coffee Co.", and three sample products), so replace:
+"Withner Coffee Co."), so replace:
 
 - the **name**, tagline, and story,
-- the **products** (name, one-line description, size, price, tasting notes, and an optional ribbon like "Bestseller"),
-- the **order links** (`order.links`): the Venmo link (`https://venmo.com/u/THE-HANDLE`), the pickup calendar link
-  (a Google Calendar appointment page, Calendly, or any booking link), a text number (`sms:+15551234567`) and an
-  email (`mailto:...`). **A link with an empty `url` is left off the page**,
-- the **feedback address** (`feedback.to`).
-
-The Venmo and calendar links are generic placeholders (venmo.com and calendar.google.com), and the email is the reserved
-`hello@example.com`, so nothing points at a real account until they are replaced.
+- the **product** (the page is laid out for one: name, description, size, price, tasting notes). The Venmo handle and amount are the three constants near the top (`VENMO_HANDLE`, `VENMO_AMOUNT`, `VENMO_NOTE`); `venmoUrl` opens Venmo's pay screen with them filled in,
+- the **pickup calendar** link in `order.links` (a Google Calendar appointment page, Calendly, or any booking link; it is a placeholder now). **A link with an empty `url` is left off the page**,
+- the **contact address** (`contact.to`; it is `hello@example.com` for now).
 
 ## Password page (while under development)
 
@@ -29,11 +24,11 @@ on/off switch are in `src/content/site.ts` (`gate`). It is a casual gate, not re
 page's own code, so anyone who views the source can read it. **To go public:** set `gate.enabled` to `false` and
 delete the `noindex` line in `index.html`.
 
-## Feedback
+## Contact form
 
-The form fills in an email to `feedback.to` and opens the visitor's own email app, so there is no server and
-nothing is stored. If the owner later wants responses collected in one place, swap the form's submit handler
-(`src/components/Feedback.tsx`) for a form service or a small backend.
+On Netlify the form is stored there and emailed to the owner. On the current server (no backend), the post is refused and the
+visitor is offered a link that opens their own email app, addressed to `contact.to`. To collect messages in one place on
+this host, swap the submit handler in `src/components/Contact.tsx` for a form service or a small backend.
 
 ## Look and feel
 

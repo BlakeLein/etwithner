@@ -9,19 +9,19 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta
       name="description"
-      content="Small-batch cold brew coffee, steeped for eighteen hours and bottled by hand. See the brews, order with Venmo, and share your feedback."
+      content="Small-batch cold brew coffee, steeped for eighteen hours and bottled by hand. Order with Venmo and pick it up locally in Jersey Village, Texas."
     />
     <title>Withner Coffee Co. | Family-Made Cold Brew</title>
   </head>
   <body>
     <div id="root"></div>
-    <!-- Netlify finds forms by reading the built HTML, and the real feedback form is drawn by React,
+    <!-- Netlify finds forms by reading the built HTML, and the real contact form is drawn by React,
          so this hidden copy tells Netlify the form exists. Keep its field names in step with
-         src/components/Feedback.tsx. -->
-    <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
+         src/components/Contact.tsx. -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input name="bot-field" />
       <input name="name" />
-      <input name="rating" />
+      <input name="email" />
       <textarea name="message"></textarea>
     </form>
     <script type="module" src="/src/main.tsx"></script>

@@ -1,26 +1,19 @@
-import { site } from '../content/site';
-import { Glass, Jug, Ornament } from '../art/Art';
-
-// A different label color on each card, so the lineup is easy to tell apart.
-const ACCENTS = ['var(--teal)', 'var(--yellow)', 'var(--coral)'];
+import { site, venmoUrl } from '../content/site';
+import { Glass, Ornament } from '../art/Art';
 
 export default function Products() {
   return (
     <section className="section tint" id="brews">
       <div className="wrap">
-        <p className="kicker">The brews</p>
+        <p className="kicker">The brew</p>
         <h2>What we pour</h2>
         <Ornament />
         <div className="products">
-          {site.products.map((product, index) => (
+          {site.products.map((product) => (
             <article key={product.id} className="product">
               {product.badge && <span className="ribbon">{product.badge}</span>}
               <div className="product-art">
-                {product.art === 'jug' ? (
-                  <Jug accent={ACCENTS[index % ACCENTS.length]} />
-                ) : (
-                  <Glass accent={ACCENTS[index % ACCENTS.length]} />
-                )}
+                <Glass accent="var(--teal)" />
               </div>
               <div className="product-body">
                 <h3>{product.name}</h3>
@@ -34,15 +27,18 @@ export default function Products() {
                   <span className="size">{product.size}</span>
                   <span className="price">{product.price}</span>
                 </div>
+                <div className="product-actions">
+                  <a className="btn btn-primary" href={venmoUrl} target="_blank" rel="noopener noreferrer">
+                    Pay with Venmo
+                  </a>
+                  <a className="btn btn-ghost" href="#order">
+                    How to order
+                  </a>
+                </div>
               </div>
             </article>
           ))}
         </div>
-        <p className="center-note">
-          <a className="btn btn-primary" href="#order">
-            Ready to order
-          </a>
-        </p>
       </div>
     </section>
   );

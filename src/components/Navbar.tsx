@@ -14,7 +14,7 @@ export default function Navbar() {
           <a href="#brews">Brews</a>
           <a href="#about">About</a>
           <a href="#order">Order</a>
-          <a href="#feedback">Feedback</a>
+          <a href="#contact">Contact</a>
         </nav>
       </header>
     </>

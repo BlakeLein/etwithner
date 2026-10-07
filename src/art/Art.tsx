@@ -36,51 +36,6 @@ export function Glass({ accent, className = 'drink' }: { accent: string; classNa
   );
 }
 
-// A jug of cold brew with a handle and a colored label, for the big-size product.
-export function Jug({ accent, className = 'drink' }: { accent: string; className?: string }) {
-  return (
-    <svg viewBox="0 0 140 220" aria-hidden="true" className={className}>
-      <path d="M104 84 H118 Q130 84 130 98 V152 Q130 166 118 166 H104" fill="none" stroke="var(--ink)" strokeWidth="9" strokeLinecap="round" />
-      <rect x="24" y="50" width="84" height="162" rx="14" fill="var(--white)" fillOpacity="0.45" />
-      <path d="M26 88 H106 V198 Q106 210 94 210 H38 Q26 210 26 198 Z" fill="var(--brown)" />
-      <g fill="var(--white)" fillOpacity="0.85">
-        <rect x="34" y="76" width="24" height="24" rx="5" transform="rotate(-10 46 88)" />
-        <rect x="68" y="80" width="22" height="22" rx="5" transform="rotate(12 79 91)" />
-      </g>
-      <rect x="34" y="124" width="64" height="56" fill={accent} />
-      <circle cx="66" cy="148" r="12" fill="var(--white)" />
-      <circle cx="66" cy="148" r="4.5" fill={accent} />
-      <rect x="24" y="50" width="84" height="162" rx="14" fill="none" stroke="var(--ink)" strokeWidth="4" />
-      <rect x="30" y="32" width="72" height="20" rx="6" fill="var(--ink)" />
-    </svg>
-  );
-}
-
-// A coffee bean, for the feedback rating.
-export function Bean({ filled }: { filled: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-      <ellipse
-        cx="12"
-        cy="12"
-        rx="7"
-        ry="10"
-        transform="rotate(35 12 12)"
-        fill={filled ? 'var(--coral)' : 'none'}
-        stroke={filled ? 'var(--coral)' : 'var(--ink)'}
-        strokeWidth="1.6"
-      />
-      <path
-        d="M8.5 5.5 C13 9 11 14 15.5 18.5"
-        stroke={filled ? 'var(--white)' : 'var(--ink)'}
-        strokeWidth="1.6"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 // Three small dots under section titles, one in each brand color.
 export function Ornament() {
   return (

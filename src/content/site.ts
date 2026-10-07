@@ -16,8 +16,6 @@ export interface Product {
   notes: string[];
   // A small ribbon on the card, like "Bestseller". Optional.
   badge?: string;
-  // Which drawing to show on the card: a glass (the default) or a jug.
-  art?: 'glass' | 'jug';
 }
 
 export interface OrderLink {
@@ -26,6 +24,13 @@ export interface OrderLink {
   description: string;
   url: string;
 }
+
+// Venmo: the handle and what one bottle costs. `venmoUrl` opens Venmo's pay screen for that account with
+// the amount and a note already filled in (the buyer can still change the amount for more bottles).
+const VENMO_HANDLE = 'etwithner';
+const VENMO_AMOUNT = '10';
+const VENMO_NOTE = 'Withner Coffee Co. cold brew (32 oz)';
+export const venmoUrl = `https://venmo.com/${VENMO_HANDLE}?txn=pay&amount=${VENMO_AMOUNT}&note=${encodeURIComponent(VENMO_NOTE)}`;
 
 // While the site is under development it sits behind a simple password page. This is a casual
 // "keep the curious out" gate, not real security: the password is in the page's own code, so anyone
@@ -61,32 +66,15 @@ export const site = {
     ],
   },
 
+  // The one thing we sell. (The page is laid out for a single product.)
   products: [
     {
-      id: 'original',
-      name: 'The Original',
-      tagline: 'Our original black cold brew.',
-      size: '16 oz bottle',
-      price: '$6',
+      id: 'cold-brew',
+      name: 'Cold Brew',
+      tagline: 'Eighteen hours of steeping in every bottle. Smooth, low acid, and ready to pour over ice.',
+      size: '32 oz bottle',
+      price: '$10',
       notes: ['Dark chocolate', 'Toasted nut', 'Smooth finish'],
-      badge: 'Bestseller',
-    },
-    {
-      id: 'vanilla',
-      name: 'Vanilla Bean',
-      tagline: 'Cold brew with real vanilla bean and a little caramel.',
-      size: '16 oz bottle',
-      price: '$7',
-      notes: ['Vanilla bean', 'Caramel', 'Silky'],
-    },
-    {
-      id: 'big-pour',
-      name: 'The Big Pour',
-      tagline: 'Half a gallon for the whole crew, or the whole week.',
-      size: '64 oz jug',
-      art: 'jug',
-      price: '$22',
-      notes: ['Same smooth brew', 'Best value', 'Keeps a week cold'],
     },
   ] as Product[],
 
@@ -94,34 +82,22 @@ export const site = {
     title: 'How to order',
     intro: 'No checkout and no accounts. Pick a brew, pay with Venmo, and grab a pickup time.',
     steps: [
-      { title: 'Pick your brew', text: 'Choose a bottle or a jug above.' },
-      { title: 'Pay with Venmo', text: 'Send the total, with your order in the note.' },
+      { title: 'Choose how many', text: '$10 per 32 oz bottle. Change the amount in Venmo for more.' },
+      { title: 'Pay with Venmo', text: 'The button opens Venmo with the amount and a note filled in.' },
       { title: 'Choose a pickup time', text: 'Grab an open slot on the calendar.' },
     ],
     links: [
       {
         id: 'venmo',
         label: 'Pay with Venmo',
-        description: 'Send payment and put your order in the note.',
-        url: 'https://venmo.com/',
+        description: 'Opens Venmo to pay @etwithner, with $10 and a note filled in.',
+        url: venmoUrl,
       },
       {
         id: 'calendar',
         label: 'Pickup calendar',
         description: 'See the open pickup times and pick one that works.',
         url: 'https://calendar.google.com/',
-      },
-      {
-        id: 'text',
-        label: 'Text us',
-        description: 'Questions or a special order? Send a quick text.',
-        url: '',
-      },
-      {
-        id: 'email',
-        label: 'Email us',
-        description: 'Prefer email? We read every message.',
-        url: 'mailto:hello@example.com',
       },
     ] as OrderLink[],
   },
@@ -135,11 +111,10 @@ export const site = {
     ],
   },
 
-  feedback: {
-    title: 'Tell us how it went',
-    intro: 'Loved it? Want something different? A quick note helps us brew better.',
-    // Where feedback is sent. The form opens the visitor's email app with their note filled in, so
-    // there is no server to run. Replace with the real address.
+  contact: {
+    title: 'Get in touch',
+    intro: 'Questions, a special order, or just want to say hi? Send a note and we will get back to you.',
+    // Where the form's message goes. Replace with the real address.
     to: 'hello@example.com',
   },
 
