@@ -54,8 +54,8 @@ read **About, Contact, Order**, in that order.
   Zelle shows where to send the money; Cash says to bring it to pick-up, and its blurb does not imply payment
   is needed before Evan schedules pick-up. Evan does not want Cash App or PayPal. With one payment option the
   payment step skips itself.
-- **Test the confirmation:** open the page with `?test=1` (add `&payment=zelle` or `&payment=cash`) to show the
-  modal with sample details. Nothing is sent.
+- **Test the confirmation:** open the page with `?test=1` (Venmo), `?test=2` (Zelle), or `?test=3` (Cash) to
+  show the modal with sample details. Nothing is sent.
 - **Contact form** (`src/components/Contact.tsx`): reason for contact (Order Inquiry, Need Support,
   Feedback), name, email, message. POSTs a Netlify form named `contact`.
 - If the POST fails (for example when running locally, where it returns 404), the buyer sees a link to email

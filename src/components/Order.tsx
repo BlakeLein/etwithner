@@ -19,17 +19,17 @@ function dollars(amount: number) {
 // refused and the buyer is shown a link to email the order instead, so nothing is lost.
 export default function Order() {
   const { order } = site;
-  // Opening the page with ?test=1 shows the confirmation with sample details (add &payment=zelle or
-  // &payment=cash to see those versions). Nothing is sent.
-  const params = new URLSearchParams(window.location.search);
-  const testing = params.get('test') === '1';
-  const testPayment = order.payments.find((method) => method.id === params.get('payment'));
+  // Opening the page with ?test=1, 2, or 3 shows the confirmation with sample details for the first,
+  // second, or third payment type (Venmo, Zelle, Cash). Nothing is sent.
+  const testNumber = Number(new URLSearchParams(window.location.search).get('test'));
+  const testPayment = Number.isInteger(testNumber) ? order.payments[testNumber - 1] : undefined;
+  const testing = testPayment !== undefined;
   const [quantity, setQuantity] = useState(testing ? 2 : 1);
   const [name, setName] = useState(testing ? 'Test Tester' : '');
   const [email, setEmail] = useState(testing ? 'test@example.com' : '');
   const [phone, setPhone] = useState(testing ? '(555) 555-0123' : '');
   const [pickup, setPickup] = useState(testing ? order.pickupWindows[0].id : '');
-  const [paymentId, setPaymentId] = useState((testing && testPayment ? testPayment : order.payments[0]).id);
+  const [paymentId, setPaymentId] = useState((testPayment ?? order.payments[0]).id);
   const [error, setError] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>(testing ? 'sent' : 'idle');
   const dialogRef = useRef<HTMLDivElement>(null);
