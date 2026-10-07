@@ -200,9 +200,12 @@ h2 { font-size: clamp(2rem, 5vw, 3.2rem); text-align: left; text-wrap: balance; 
 
 /* ── Smaller screens ────────────────────────── */
 @media (max-width: 860px) {
-  .hero::before { top: auto; left: 0; width: auto; height: 16vw; clip-path: polygon(0 100%, 100% 0, 100% 100%); }
-  .hero::after { display: none; }
-  .hero-inner { padding-bottom: 22vw; }
+  /* The same two stripes as on desktop, laid across the bottom and scaled to the screen width so the whole
+     graphic shows: a teal band and, below it, a yellow wedge, both sloping the same way. */
+  .hero::before, .hero::after { top: auto; bottom: 0; left: 0; right: 0; width: auto; height: 26vw; }
+  .hero::before { clip-path: polygon(0 100%, 100% 0, 100% 100%); }
+  .hero::after { clip-path: polygon(0 70%, 70% 0, 100% 0, 0 100%); }
+  .hero-inner { padding-bottom: 30vw; }
   .products, .highlights { grid-template-columns: minmax(0, 1fr); }
   .product { grid-template-columns: minmax(0, 1fr); }
   .drink { height: 220px; }
