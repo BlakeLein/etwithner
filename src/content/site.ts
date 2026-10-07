@@ -2,10 +2,9 @@
 // To change the site, change this file. It is SAMPLE CONTENT right now (a placeholder brand and
 // products) so the page looks finished while the real details are filled in.
 //
-// Links with an empty `url` are simply left off the page, so a link can be removed by blanking it.
-// The Venmo and calendar links below are generic placeholders: replace them with the real ones
-// (for Venmo: https://venmo.com/u/THEIR-HANDLE; for a calendar: a Google Calendar appointment page,
-// Calendly, or any booking link).
+// The ordering form (see `order` below) emails each order to the owner through a form service, then sends
+// the buyer to pay. Fill in `order.endpoint` to turn that on (see the README), and replace the SAMPLE
+// pickup windows with the times that really work.
 
 export interface Product {
   id: string;
@@ -18,19 +17,21 @@ export interface Product {
   badge?: string;
 }
 
-export interface OrderLink {
-  id: 'venmo' | 'calendar' | 'text' | 'email';
+// What one bottle costs, in dollars. The product card and the ordering form both use it.
+const UNIT_PRICE = 10;
+
+export interface PickupWindow {
+  id: string;
   label: string;
-  description: string;
-  url: string;
 }
 
-// Venmo: the handle and what one bottle costs. `venmoUrl` opens Venmo's pay screen for that account with
-// the amount and a note already filled in (the buyer can still change the amount for more bottles).
-const VENMO_HANDLE = 'etwithner';
-const VENMO_AMOUNT = '10';
-const VENMO_NOTE = 'Withner Coffee Co. cold brew (32 oz)';
-export const venmoUrl = `https://venmo.com/${VENMO_HANDLE}?txn=pay&amount=${VENMO_AMOUNT}&note=${encodeURIComponent(VENMO_NOTE)}`;
+export interface PaymentMethod {
+  id: 'venmo' | 'cashapp' | 'paypal' | 'zelle';
+  label: string;
+  // The account to pay: the Venmo username (no @), the Cash App cashtag (no $), the PayPal.Me name, or
+  // the email/phone number registered with Zelle (Zelle has no pay link, so buyers are shown it instead).
+  handle: string;
+}
 
 // While the site is under development it sits behind a simple password page. This is a casual
 // "keep the curious out" gate, not real security: the password is in the page's own code, so anyone
@@ -50,8 +51,6 @@ export const site = {
   // The thin colored bar above the navigation. Blank to leave off.
   announcement: '',
   tagline: 'Slow-steeped. Small batch. Smooth every time.',
-  intro:
-    'Cold brew steeped for eighteen hours, bottled by hand, and made to be poured over ice.',
 
   story: {
     title: 'Steeped slow, made simple',
@@ -73,33 +72,36 @@ export const site = {
       name: 'Cold Brew',
       tagline: 'Eighteen hours of steeping in every bottle. Smooth, low acid, and ready to pour over ice.',
       size: '32 oz bottle',
-      price: '$10',
+      price: `$${UNIT_PRICE}`,
       notes: ['Dark chocolate', 'Toasted nut', 'Smooth finish'],
     },
   ] as Product[],
 
+  // The ordering form: quantity, contact info, pickup window, then submit and pay.
   order: {
-    title: 'How to order',
-    intro: 'No checkout and no accounts. Pick a brew, pay with Venmo, and grab a pickup time.',
-    steps: [
-      { title: 'Choose how many', text: '$10 per 32 oz bottle. Change the amount in Venmo for more.' },
-      { title: 'Pay with Venmo', text: 'The button opens Venmo with the amount and a note filled in.' },
-      { title: 'Choose a pickup time', text: 'Grab an open slot on the calendar.' },
-    ],
-    links: [
-      {
-        id: 'venmo',
-        label: 'Pay with Venmo',
-        description: 'Opens Venmo to pay @etwithner, with $10 and a note filled in.',
-        url: venmoUrl,
-      },
-      {
-        id: 'calendar',
-        label: 'Pickup calendar',
-        description: 'See the open pickup times and pick one that works.',
-        url: 'https://calendar.google.com/',
-      },
-    ] as OrderLink[],
+    title: 'Place your order',
+    unitPrice: UNIT_PRICE,
+    maxQuantity: 12,
+    itemLabel: '32 oz Cold Brew',
+    // Where each order is sent so it lands in the owner's email: a form-service URL such as
+    // https://formspree.io/f/XXXXXXXX (it emails whoever owns that form). Blank = not set up yet, and the
+    // form falls back to letting the buyer email the order themselves.
+    endpoint: '',
+    // The general pickup windows buyers can choose from. SAMPLE: replace with times that work for Evan.
+    pickupWindows: [
+      { id: 'weekday-evening', label: 'Weekday evenings (5-8 PM)' },
+      { id: 'saturday-morning', label: 'Saturday morning (9 AM-12 PM)' },
+      { id: 'saturday-afternoon', label: 'Saturday afternoon (12-5 PM)' },
+      { id: 'sunday-afternoon', label: 'Sunday afternoon (1-5 PM)' },
+    ] as PickupWindow[],
+    // How buyers pay. With only one, the "payment type" step is skipped. MOCK-UP: only the Venmo handle is
+    // real; the others are placeholders. Delete a line to drop that option (or all but one to drop the step).
+    payments: [
+      { id: 'venmo', label: 'Venmo', handle: 'etwithner' },
+      { id: 'cashapp', label: 'Cash App', handle: 'etwithner' },
+      { id: 'paypal', label: 'PayPal', handle: 'etwithner' },
+      { id: 'zelle', label: 'Zelle', handle: 'hello@example.com' },
+    ] as PaymentMethod[],
   },
 
   // The "About me" section between the product and ordering. SAMPLE words: replace with the real story.
@@ -113,7 +115,6 @@ export const site = {
 
   contact: {
     title: 'Get in touch',
-    intro: 'Questions, a special order, or just want to say hi? Send a note and we will get back to you.',
     // The choices in the "Reason for contact" menu.
     reasons: ['Order Inquiry', 'Need Support', 'Feedback'],
     // Where the form's message goes. Replace with the real address.

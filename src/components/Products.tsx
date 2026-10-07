@@ -1,4 +1,4 @@
-import { site, venmoUrl } from '../content/site';
+import { site } from '../content/site';
 import { Glass, Ornament } from '../art/Art';
 
 export default function Products() {
@@ -28,11 +28,8 @@ export default function Products() {
                   <span className="price">{product.price}</span>
                 </div>
                 <div className="product-actions">
-                  <a className="btn btn-primary" href={venmoUrl} target="_blank" rel="noopener noreferrer">
-                    Pay with Venmo
-                  </a>
-                  <a className="btn btn-ghost" href="#order">
-                    How to order
+                  <a className="btn btn-primary" href="#order">
+                    Order now
                   </a>
                 </div>
               </div>

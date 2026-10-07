@@ -1,7 +1,7 @@
 # Withner Coffee Co.: cold brew coffee site
 
 A one-page, no-checkout website for a small-batch cold brew business: a hero, the story, the products,
-how to order (Venmo and a pickup calendar), and a contact form. A modern, minimal look: lots of
+a light ordering form (quantity, contact info, pickup window, then pay with Venmo), and a contact form. A modern, minimal look: lots of
 white, black type, and three bright colors (coral, blue, yellow), with flat drink illustrations.
 
 > This repo used to be a financial-advisory demo (E.T. Withner). It was replaced with this site, keeping the
@@ -13,9 +13,20 @@ white, black type, and three bright colors (coral, blue, yellow), with flat drin
 "Withner Coffee Co."), so replace:
 
 - the **name**, tagline, and story,
-- the **product** (the page is laid out for one: name, description, size, price, tasting notes). The Venmo handle and amount are the three constants near the top (`VENMO_HANDLE`, `VENMO_AMOUNT`, `VENMO_NOTE`); `venmoUrl` opens Venmo's pay screen with them filled in,
-- the **pickup calendar** link in `order.links` (a Google Calendar appointment page, Calendly, or any booking link; it is a placeholder now). **A link with an empty `url` is left off the page**,
+- the **product** (the page is laid out for one: name, description, size, tasting notes) and its price (`UNIT_PRICE` near the top),
+- the **ordering form** (`order` in `site.ts`): the max quantity, the **pickup windows** (SAMPLE: use only times that work for the owner), the
+  payment account (`payments`, Venmo handle `etwithner`), and `endpoint` (below),
 - the **contact address** (`contact.to`; it is `hello@example.com` for now).
+
+## Ordering form
+
+Steps: pick a quantity (the price updates), enter contact info, choose a general pickup window, then **Submit order and pay**. On submit the
+order is POSTed as JSON to `order.endpoint` so it is emailed to the owner, and the buyer is then sent to Venmo's pay screen for `@etwithner`
+with the total and a note (quantity, pickup window, name) already filled in. The payment-method step is skipped while Venmo is the only choice.
+
+`order.endpoint` is blank until a form service is set up (for example a free Formspree form: it emails whoever owns it and takes a URL like
+`https://formspree.io/f/XXXXXXXX`). While it is blank, or if sending fails, the buyer sees a link to email the order themselves plus the Venmo
+link, so no order is lost. Code: `src/components/Order.tsx`.
 
 ## Password page (while under development)
 

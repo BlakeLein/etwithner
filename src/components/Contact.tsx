@@ -58,7 +58,6 @@ export default function Contact() {
         <p className="kicker">Contact</p>
         <h2>{contact.title}</h2>
         <Ornament />
-        <p className="lede">{contact.intro}</p>
         <form className="card-form" onSubmit={submit} noValidate>
           <label className="field">
             <span>Reason for contact</span>

@@ -11,7 +11,6 @@ export default function Hero() {
             <span className="hero-descriptor">{site.descriptor}</span>
           </h1>
           <p className="hero-tagline">{site.tagline}</p>
-          <p className="hero-intro">{site.intro}</p>
           <div className="hero-actions">
             <a className="btn btn-ghost" href="#about">
               About
