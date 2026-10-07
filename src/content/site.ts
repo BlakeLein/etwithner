@@ -118,5 +118,7 @@ export const site = {
 
   footer: {
     tag: 'Brewed by the Withner Family in Jersey Village, Texas',
+    // The web designer's credit, the last line of the page. Blank `name` to leave off.
+    credit: { text: 'Website designed and managed by', name: 'Blake Lein', url: 'https://www.blakelein.com' },
   },
 };

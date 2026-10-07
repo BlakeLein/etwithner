@@ -186,6 +186,9 @@ h2 { font-size: clamp(2rem, 5vw, 3.2rem); text-align: left; }
 .footer-name span { color: var(--yellow); margin-left: 0.4rem; }
 .footer-tag { font-size: 0.9rem; font-weight: 700; color: var(--coral); margin: 0 0 1.4rem; }
 .footer-copy { font-size: 0.8rem; opacity: 0.6; margin: 0; }
+.footer-credit { margin: 2rem auto 0; padding-top: 1.4rem; max-width: 520px; border-top: 1px solid rgba(255, 255, 255, 0.18); font-size: 0.95rem; font-weight: 600; color: var(--white); }
+.footer-credit a { color: var(--yellow); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.footer-credit a:hover { color: var(--white); }
 
 /* ── Smaller screens ────────────────────────── */
 @media (max-width: 860px) {

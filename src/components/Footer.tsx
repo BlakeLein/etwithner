@@ -13,6 +13,14 @@ export default function Footer() {
         &copy; {new Date().getFullYear()} {site.name}
         {site.maker && ` · ${site.maker}`}
       </p>
+      {site.footer.credit.name && (
+        <p className="footer-credit">
+          {site.footer.credit.text}{' '}
+          <a href={site.footer.credit.url} target="_blank" rel="noopener noreferrer">
+            {site.footer.credit.name}
+          </a>
+        </p>
+      )}
     </footer>
   );
 }
