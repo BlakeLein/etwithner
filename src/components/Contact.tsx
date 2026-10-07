@@ -7,6 +7,7 @@ import { Ornament } from '../art/Art';
 // offered their own email app instead, so a message is never lost.
 export default function Contact() {
   const { contact } = site;
+  const [reason, setReason] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -14,14 +15,14 @@ export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
 
   function mailtoLink() {
-    const lines = [message.trim(), '', `From: ${name.trim()} <${email.trim()}>`];
-    return `mailto:${contact.to}?subject=${encodeURIComponent(`Message for ${site.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    const lines = [message.trim(), '', `Reason: ${reason}`, `From: ${name.trim()} <${email.trim()}>`];
+    return `mailto:${contact.to}?subject=${encodeURIComponent(`${reason}: message for ${site.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`;
   }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (name.trim() === '' || !/^\S+@\S+\.\S+$/.test(email.trim()) || message.trim() === '') {
-      setError('Please add your name, a valid email, and a message.');
+    if (reason === '' || name.trim() === '' || !/^\S+@\S+\.\S+$/.test(email.trim()) || message.trim() === '') {
+      setError('Please choose a reason and add your name, a valid email, and a message.');
       return;
     }
     setError('');
@@ -30,6 +31,7 @@ export default function Contact() {
       const body = new URLSearchParams({
         'form-name': 'contact',
         'bot-field': '',
+        reason,
         name: name.trim(),
         email: email.trim(),
         message: message.trim(),
@@ -41,6 +43,7 @@ export default function Contact() {
       });
       if (!response.ok) throw new Error('not ok');
       setStatus('sent');
+      setReason('');
       setName('');
       setEmail('');
       setMessage('');
@@ -57,6 +60,19 @@ export default function Contact() {
         <Ornament />
         <p className="lede">{contact.intro}</p>
         <form className="card-form" onSubmit={submit} noValidate>
+          <label className="field">
+            <span>Reason for contact</span>
+            <select value={reason} onChange={(e) => setReason(e.target.value)}>
+              <option value="" disabled>
+                Select a reason
+              </option>
+              {contact.reasons.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="field">
             <span>Your name</span>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />

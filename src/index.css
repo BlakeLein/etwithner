@@ -163,8 +163,8 @@ h2 { font-size: clamp(2rem, 5vw, 3.2rem); text-align: left; }
 .card-form { display: grid; gap: 1.2rem; text-align: left; color: var(--ink); background: var(--white); padding: 2.2rem 2rem; border-radius: 0; }
 .field { display: grid; gap: 0.4rem; }
 .field span { font-size: 0.82rem; font-weight: 700; color: var(--ink); padding: 0; }
-.field input, .field textarea { font: inherit; color: var(--ink); background: var(--tint); border: 2px solid transparent; border-radius: 0; padding: 0.8rem 1rem; width: 100%; }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--teal); background: var(--white); }
+.field input, .field textarea, .field select { font: inherit; color: var(--ink); background: var(--tint); border: 2px solid transparent; border-radius: 0; padding: 0.8rem 1rem; width: 100%; }
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--teal); background: var(--white); }
 .form-error { color: #c0261a; margin: 0; font-size: 0.95rem; }
 .form-ok { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
 .form-ok a { color: var(--teal); }
@@ -175,7 +175,6 @@ h2 { font-size: clamp(2rem, 5vw, 3.2rem); text-align: left; }
 .footer svg { color: var(--white); }
 .footer-name { font-size: 1.3rem; color: var(--white); margin: 0.8rem 0 0.2rem; font-weight: 700; letter-spacing: -0.02em; }
 .footer-name span { color: var(--yellow); margin-left: 0.4rem; }
-.footer-note { margin: 0 0 0.4rem; }
 .footer-tag { font-size: 0.9rem; font-weight: 700; color: var(--coral); margin: 0 0 1.4rem; }
 .footer-copy { font-size: 0.8rem; opacity: 0.6; margin: 0; }
 

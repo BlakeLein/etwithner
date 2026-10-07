@@ -102,7 +102,7 @@ export const site = {
     ] as OrderLink[],
   },
 
-  // The "About me" section between the brews and ordering. SAMPLE words: replace with the real story.
+  // The "About me" section between the product and ordering. SAMPLE words: replace with the real story.
   about: {
     title: 'About me',
     paragraphs: [
@@ -114,12 +114,13 @@ export const site = {
   contact: {
     title: 'Get in touch',
     intro: 'Questions, a special order, or just want to say hi? Send a note and we will get back to you.',
+    // The choices in the "Reason for contact" menu.
+    reasons: ['Order Inquiry', 'Need Support', 'Feedback'],
     // Where the form's message goes. Replace with the real address.
     to: 'hello@example.com',
   },
 
   footer: {
-    note: 'Brewed in small batches. Poured with care.',
     tag: 'Brewed by the Withner Family in Jersey Village, Texas',
   },
 };

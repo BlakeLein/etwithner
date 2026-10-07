@@ -13,11 +13,14 @@ export default function Hero() {
           <p className="hero-tagline">{site.tagline}</p>
           <p className="hero-intro">{site.intro}</p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#brews">
-              See the brews
+            <a className="btn btn-ghost" href="#about">
+              About
             </a>
-            <a className="btn btn-ghost" href="#order">
-              How to order
+            <a className="btn btn-ghost" href="#contact">
+              Contact
+            </a>
+            <a className="btn btn-primary" href="#order">
+              Order
             </a>
           </div>
         </div>

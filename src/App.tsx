@@ -11,7 +11,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import useScrollReveal from './hooks/useScrollReveal';
 
-// One page, top to bottom: hero, story, the brews, about me, how to order, contact. All the words and links
+// One page, top to bottom: hero, story, the product, about me, how to order, contact. All the words and links
 // are in src/content/site.ts.
 export default function App() {
   const [authenticated, setAuthenticated] = useState(
@@ -31,8 +31,8 @@ export default function App() {
 
   return (
     <>
-      <a className="skip" href="#brews">
-        Skip to the brews
+      <a className="skip" href="#story">
+        Skip to the content
       </a>
       <Navbar />
       <main>

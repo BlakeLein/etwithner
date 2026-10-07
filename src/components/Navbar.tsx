@@ -11,10 +11,9 @@ export default function Navbar() {
           <span className="logo-word">{site.name}</span>
         </a>
         <nav aria-label="Sections">
-          <a href="#brews">Brews</a>
           <a href="#about">About</a>
-          <a href="#order">Order</a>
           <a href="#contact">Contact</a>
+          <a href="#order">Order</a>
         </nav>
       </header>
     </>

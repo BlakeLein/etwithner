@@ -3,10 +3,10 @@ import { Glass, Ornament } from '../art/Art';
 
 export default function Products() {
   return (
-    <section className="section tint" id="brews">
+    <section className="section tint" id="product">
       <div className="wrap">
         <p className="kicker">The brew</p>
-        <h2>What we pour</h2>
+        <h2>What we do best</h2>
         <Ornament />
         <div className="products">
           {site.products.map((product) => (
