@@ -176,6 +176,11 @@ h2 { font-size: clamp(2rem, 5vw, 3.2rem); text-align: left; text-wrap: balance; 
 .field { display: grid; gap: 0.4rem; }
 .field span { font-size: 0.82rem; font-weight: 700; color: var(--ink); padding: 0; }
 .field input, .field textarea, .field select { font: inherit; color: var(--ink); background: var(--tint); border: 2px solid transparent; border-radius: 0; padding: 0.8rem 1rem; width: 100%; }
+.privacy-note { margin: 0.9rem 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+.card-form .privacy-note { margin: -0.4rem 0 0; }
+.field-error { font-style: normal; font-size: 0.88rem; font-weight: 600; color: #b3261e; }
+.choices-error { display: block; margin-bottom: 0.6rem; }
+.field input[aria-invalid='true'], .field textarea[aria-invalid='true'], .field select[aria-invalid='true'] { border-color: #b3261e; }
 .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--teal); background: var(--white); }
 .form-error { color: #c0261a; margin: 0; font-size: 0.95rem; }
 .form-ok { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }

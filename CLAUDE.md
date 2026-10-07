@@ -56,12 +56,26 @@ read **About, Contact, Order**, in that order.
   payment step skips itself.
 - **Test the confirmation:** open the page with `?test=1` (Venmo), `?test=2` (Zelle), or `?test=3` (Cash) to
   show the modal with sample details. Nothing is sent.
+- **Validation** lives in `src/lib/validate.ts` and is shared by both forms (inline error under each field):
+  name is letters, spaces, hyphens, apostrophes, and periods, 2 to 60 characters; email must be a plain valid
+  address; phone is numbers only (digits, spaces, parentheses, dashes, plus) and exactly 10 digits (US, an
+  optional leading 1); message is required, up to 2000 characters; pickup window and contact reason are required.
+  Letters cannot be typed into the phone field. This runs in the browser only, so anything that reads or stores
+  submissions (a future admin app) must re-check the same rules server-side and use parameterized queries.
 - **Contact form** (`src/components/Contact.tsx`): reason for contact (Order Inquiry, Need Support,
   Feedback), name, email, message. POSTs a Netlify form named `contact`.
 - If the POST fails (for example when running locally, where it returns 404), the buyer sees a link to email
   the order or message to `contact.to`, so nothing is lost.
 - **Notification emails** are set in the Netlify dashboard (Site settings, Forms, Form notifications), not
   in this repo.
+
+## Planned backend
+
+Orders and messages will also be forwarded from Netlify to a separate admin back end, the `etwadmin` repo
+(`etwadmin.blakelein.com`, later `admin.withnercoffeeco.com`), which stores them in SQLite behind a Google
+sign-in for Evan and Blake. That server re-checks every field and computes prices itself, so the browser
+validation here is a convenience, not the protection. Its allowed pickup windows, payment types, item, price,
+and contact reasons (`etwadmin/backend/src/shop.ts`) must match `src/content/site.ts` here; change both together.
 
 ## Rules for working here
 

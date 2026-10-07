@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { site, type PaymentMethod } from '../content/site';
 import { Ornament } from '../art/Art';
+import { LIMITS, cleanPhone, validateChoice, validateEmail, validateName, validatePhone } from '../lib/validate';
 
 // The Venmo pay screen for the owner's account, with the amount and a note already filled in. Zelle and cash
 // have no pay link, so they return null and the confirmation shows instructions instead.
@@ -30,7 +31,7 @@ export default function Order() {
   const [phone, setPhone] = useState(testing ? '(555) 555-0123' : '');
   const [pickup, setPickup] = useState(testing ? order.pickupWindows[0].id : '');
   const [paymentId, setPaymentId] = useState((testPayment ?? order.payments[0]).id);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>(testing ? 'sent' : 'idle');
   const dialogRef = useRef<HTMLDivElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
@@ -65,7 +66,8 @@ export default function Order() {
     setPhone('');
     setPickup('');
     setPaymentId(order.payments[0].id);
-    submitRef.current?.focus();
+    submitRef.current?.focus({ preventScroll: true });
+    document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // While the confirmation is open: lock the page scroll, focus the dialog, close on Escape, keep Tab inside.
@@ -103,11 +105,14 @@ export default function Order() {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (name.trim() === '' || !/^\S+@\S+\.\S+$/.test(email.trim()) || phone.replace(/\D/g, '').length < 10 || pickup === '') {
-      setError('Please add your name, a valid email, a phone number, and choose a pickup window.');
-      return;
-    }
-    setError('');
+    const found = {
+      name: validateName(name),
+      email: validateEmail(email),
+      phone: validatePhone(phone),
+      pickup: validateChoice(pickup, 'Choose a pickup window.'),
+    };
+    setErrors(found);
+    if (Object.values(found).some((message) => message !== '')) return;
     setStatus('sending');
     try {
       const body = new URLSearchParams({
@@ -176,17 +181,52 @@ export default function Order() {
             <div className="check-fields">
               <label className="field">
                 <span>Name</span>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+                <input
+                  type="text"
+                  value={name}
+                  maxLength={LIMITS.name}
+                  autoComplete="name"
+                  aria-invalid={Boolean(errors.name)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setErrors((prev) => ({ ...prev, name: '' }));
+                  }}
+                />
+                {errors.name && <em className="field-error">{errors.name}</em>}
               </label>
               <label className="field">
                 <span>Email</span>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+                <input
+                  type="email"
+                  value={email}
+                  maxLength={LIMITS.email}
+                  autoComplete="email"
+                  aria-invalid={Boolean(errors.email)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrors((prev) => ({ ...prev, email: '' }));
+                  }}
+                />
+                {errors.email && <em className="field-error">{errors.email}</em>}
               </label>
               <label className="field">
                 <span>Phone</span>
-                <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" />
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  value={phone}
+                  maxLength={LIMITS.phone}
+                  autoComplete="tel"
+                  aria-invalid={Boolean(errors.phone)}
+                  onChange={(e) => {
+                    setPhone(cleanPhone(e.target.value));
+                    setErrors((prev) => ({ ...prev, phone: '' }));
+                  }}
+                />
+                {errors.phone && <em className="field-error">{errors.phone}</em>}
               </label>
             </div>
+            <p className="privacy-note">{site.privacy}</p>
           </fieldset>
 
           {choosePayment && (
@@ -211,10 +251,19 @@ export default function Order() {
               <span className="step-num" aria-hidden="true">{nextStep()}</span>
               Preferred pickup window
             </legend>
+            {errors.pickup && <em className="field-error choices-error">{errors.pickup}</em>}
             <div className="choices">
               {order.pickupWindows.map((window) => (
                 <label key={window.id} className="choice">
-                  <input type="radio" name="pickup" checked={pickup === window.id} onChange={() => setPickup(window.id)} />
+                  <input
+                    type="radio"
+                    name="pickup"
+                    checked={pickup === window.id}
+                    onChange={() => {
+                      setPickup(window.id);
+                      setErrors((prev) => ({ ...prev, pickup: '' }));
+                    }}
+                  />
                   <span>{window.label}</span>
                 </label>
               ))}
@@ -224,11 +273,6 @@ export default function Order() {
           <div className="check-submit">
             <span className="step-num" aria-hidden="true">{nextStep()}</span>
             <div className="check-submit-body">
-              {error && (
-                <p className="form-error" role="alert">
-                  {error}
-                </p>
-              )}
               <button ref={submitRef} type="submit" className="btn btn-primary" disabled={status === 'sending'}>
                 {status === 'sending' ? 'Sending…' : `Submit and move on to ${dollars(total)} payment`}
               </button>

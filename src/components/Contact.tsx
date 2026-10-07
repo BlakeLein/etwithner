@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { site } from '../content/site';
 import { Ornament } from '../art/Art';
+import { LIMITS, validateChoice, validateEmail, validateMessage, validateName } from '../lib/validate';
 
 // A simple contact form. On Netlify the form is stored there and emailed to the owner (the hidden copy of
 // the form in index.html is how Netlify finds it). Anywhere else, the post is refused and the visitor is
@@ -11,7 +12,7 @@ export default function Contact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
 
   function mailtoLink() {
@@ -21,11 +22,14 @@ export default function Contact() {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (reason === '' || name.trim() === '' || !/^\S+@\S+\.\S+$/.test(email.trim()) || message.trim() === '') {
-      setError('Please choose a reason and add your name, a valid email, and a message.');
-      return;
-    }
-    setError('');
+    const found = {
+      reason: validateChoice(reason, 'Choose a reason.'),
+      name: validateName(name),
+      email: validateEmail(email),
+      message: validateMessage(message),
+    };
+    setErrors(found);
+    if (Object.values(found).some((text) => text !== '')) return;
     setStatus('sending');
     try {
       const body = new URLSearchParams({
@@ -61,7 +65,14 @@ export default function Contact() {
         <form className="card-form" onSubmit={submit} noValidate>
           <label className="field">
             <span>Reason for contact</span>
-            <select value={reason} onChange={(e) => setReason(e.target.value)}>
+            <select
+              value={reason}
+              aria-invalid={Boolean(errors.reason)}
+              onChange={(e) => {
+                setReason(e.target.value);
+                setErrors((prev) => ({ ...prev, reason: '' }));
+              }}
+            >
               <option value="" disabled>
                 Select a reason
               </option>
@@ -71,27 +82,56 @@ export default function Contact() {
                 </option>
               ))}
             </select>
+            {errors.reason && <em className="field-error">{errors.reason}</em>}
           </label>
           <label className="field">
             <span>Your name</span>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+            <input
+              type="text"
+              value={name}
+              maxLength={LIMITS.name}
+              autoComplete="name"
+              aria-invalid={Boolean(errors.name)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setErrors((prev) => ({ ...prev, name: '' }));
+              }}
+            />
+            {errors.name && <em className="field-error">{errors.name}</em>}
           </label>
           <label className="field">
             <span>Your email</span>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+            <input
+              type="email"
+              value={email}
+              maxLength={LIMITS.email}
+              autoComplete="email"
+              aria-invalid={Boolean(errors.email)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors((prev) => ({ ...prev, email: '' }));
+              }}
+            />
+            {errors.email && <em className="field-error">{errors.email}</em>}
           </label>
           <label className="field">
             <span>Your message</span>
-            <textarea rows={5} value={message} onChange={(e) => setMessage(e.target.value)} aria-invalid={error !== ''} />
+            <textarea
+              rows={5}
+              value={message}
+              maxLength={LIMITS.message}
+              aria-invalid={Boolean(errors.message)}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                setErrors((prev) => ({ ...prev, message: '' }));
+              }}
+            />
+            {errors.message && <em className="field-error">{errors.message}</em>}
           </label>
-          {error && (
-            <p className="form-error" role="alert">
-              {error}
-            </p>
-          )}
           <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
             {status === 'sending' ? 'Sending…' : 'Send message'}
           </button>
+          <p className="privacy-note">{site.privacy}</p>
           {status === 'sent' && (
             <p className="form-ok" role="status">
               Thank you! Your message is on its way.

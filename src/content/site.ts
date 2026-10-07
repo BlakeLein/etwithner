@@ -126,6 +126,9 @@ export const site = {
     to: 'hello@example.com',
   },
 
+  // Shown under the contact details on the order form and next to the contact form's send button.
+  privacy: 'Your information is private and never sold.',
+
   footer: {
     tag: 'Brewed by the Withner Family in Jersey Village, Texas',
     // The web designer's credit, the last line of the page. Blank `name` to leave off.
