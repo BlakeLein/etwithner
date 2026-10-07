@@ -15,25 +15,18 @@ white, black type, and three bright colors (coral, blue, yellow), with flat drin
 - the **name**, tagline, and story,
 - the **product** (the page is laid out for one: name, description, size, tasting notes) and its price (`UNIT_PRICE` near the top),
 - the **ordering form** (`order` in `site.ts`): the max quantity, the **pickup windows** (SAMPLE: use only times that work for the owner), the
-  payment account (`payments`, Venmo handle `etwithner`), and `endpoint` (below),
+  and the payment accounts (`payments`; only the Venmo handle is real so far),
 - the **contact address** (`contact.to`; it is `hello@example.com` for now).
 
 ## Ordering form
 
-Steps: pick a quantity (the price updates), enter contact info, choose a general pickup window, then **Submit order and pay**. On submit the
-order is POSTed as JSON to `order.endpoint` so it is emailed to the owner, and the buyer is then sent to Venmo's pay screen for `@etwithner`
-with the total and a note (quantity, pickup window, name) already filled in. The payment-method step is skipped while Venmo is the only choice.
+Steps: pick a quantity (the price updates), enter contact info, choose a payment type and a general pickup window, then **Submit order and pay**.
+On submit the order is POSTed as a Netlify form named `orders` (the hidden copy in `index.html` is how Netlify finds it; keep its field names in
+step with `src/components/Order.tsx`), and the buyer is then sent to the chosen app's pay screen with the total filled in (Venmo also gets a note;
+Zelle has no pay link, so the buyer is shown where to send it). With only one payment type, that step is skipped.
 
-`order.endpoint` is blank until a form service is set up (for example a free Formspree form: it emails whoever owns it and takes a URL like
-`https://formspree.io/f/XXXXXXXX`). While it is blank, or if sending fails, the buyer sees a link to email the order themselves plus the Venmo
-link, so no order is lost. Code: `src/components/Order.tsx`.
-
-## Password page (while under development)
-
-The site has a simple password page that is currently OFF (`gate.enabled` is false); the page also tells search engines not to index it (the `noindex` line in `index.html`, to delete once real content is in). The password and the
-on/off switch are in `src/content/site.ts` (`gate`). It is a casual gate, not real security: the password is in the
-page's own code, so anyone who views the source can read it. **To go public:** set `gate.enabled` to `false` and
-delete the `noindex` line in `index.html`.
+This only works while the site is hosted on Netlify (set the email notification under Site settings > Forms). On any other host, such as the
+current EC2 server, the post is refused and the buyer is shown a link to email the order plus the way to pay, so no order is lost.
 
 ## Contact form
 

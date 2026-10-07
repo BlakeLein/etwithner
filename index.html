@@ -18,6 +18,17 @@
     <!-- Netlify finds forms by reading the built HTML, and the real contact form is drawn by React,
          so this hidden copy tells Netlify the form exists. Keep its field names in step with
          src/components/Contact.tsx. -->
+    <form name="orders" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <input name="phone" />
+      <input name="quantity" />
+      <input name="item" />
+      <input name="total" />
+      <input name="payment" />
+      <input name="pickup" />
+    </form>
     <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input name="bot-field" />
       <select name="reason"></select>

@@ -21,8 +21,10 @@ function dollars(amount: number) {
   return `$${amount}`;
 }
 
-// A light checkout: pick a quantity, enter contact info, choose a pickup window, then submit. The order is
-// emailed to the owner (through `order.endpoint`) and the buyer is sent on to pay.
+// A light checkout: pick a quantity, enter contact info, choose a payment type and a pickup window, then
+// submit. On Netlify the order is stored there and emailed to the owner (the hidden copy of the form in
+// index.html is how Netlify finds it), and the buyer is sent on to pay. Anywhere else the post is refused
+// and the buyer is shown a link to email the order instead, so nothing is lost.
 export default function Order() {
   const { order } = site;
   const [quantity, setQuantity] = useState(1);
@@ -64,21 +66,22 @@ export default function Order() {
     setError('');
     setStatus('sending');
     try {
-      if (order.endpoint === '') throw new Error('no endpoint');
-      const response = await fetch(order.endpoint, {
+      const body = new URLSearchParams({
+        'form-name': 'orders',
+        'bot-field': '',
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        quantity: String(quantity),
+        item: order.itemLabel,
+        total: dollars(total),
+        pickup: pickupLabel,
+        payment: payment.label,
+      });
+      const response = await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          _subject: `New order: ${summary} (${dollars(total)}) from ${name.trim()}`,
-          name: name.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          quantity,
-          item: order.itemLabel,
-          total: dollars(total),
-          pickup: pickupLabel,
-          payment: payment.label,
-        }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
       });
       if (!response.ok) throw new Error('not ok');
       setStatus('sent');

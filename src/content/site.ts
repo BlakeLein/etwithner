@@ -2,9 +2,8 @@
 // To change the site, change this file. It is SAMPLE CONTENT right now (a placeholder brand and
 // products) so the page looks finished while the real details are filled in.
 //
-// The ordering form (see `order` below) emails each order to the owner through a form service, then sends
-// the buyer to pay. Fill in `order.endpoint` to turn that on (see the README), and replace the SAMPLE
-// pickup windows with the times that really work.
+// The ordering form (see `order` below) sends each order to Netlify Forms (which emails the owner), then
+// sends the buyer to pay. Replace the SAMPLE pickup windows with the times that really work.
 
 export interface Product {
   id: string;
@@ -83,10 +82,6 @@ export const site = {
     unitPrice: UNIT_PRICE,
     maxQuantity: 12,
     itemLabel: '32 oz Cold Brew',
-    // Where each order is sent so it lands in the owner's email: a form-service URL such as
-    // https://formspree.io/f/XXXXXXXX (it emails whoever owns that form). Blank = not set up yet, and the
-    // form falls back to letting the buyer email the order themselves.
-    endpoint: '',
     // The general pickup windows buyers can choose from. SAMPLE: replace with times that work for Evan.
     pickupWindows: [
       { id: 'weekday-evening', label: 'Weekday evenings (5-8 PM)' },
