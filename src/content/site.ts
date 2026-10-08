@@ -73,7 +73,7 @@ export const site = {
       name: 'Cold Brew',
       tagline: 'Eighteen hours of steeping in every bottle. Smooth, low acid, and ready to pour over ice.',
       size: '32 oz bottle',
-      servings: 'Makes up to 32 cups',
+      servings: 'Makes up to 32 servings',
       price: `$${UNIT_PRICE}`,
       notes: ['Dark chocolate', 'Toasted nut', 'Smooth finish'],
     },
@@ -111,7 +111,7 @@ export const site = {
       'Adjust to your taste preference',
     ],
     // Shown under the steps.
-    yield: 'One 32 oz bottle makes up to 32 cups.',
+    yield: 'One bottle makes up to 32 servings.',
   },
 
   // The "About me" section after it, before ordering. SAMPLE words: replace with the real story.
