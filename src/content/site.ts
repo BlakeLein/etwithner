@@ -12,6 +12,8 @@ export interface Product {
   size: string;
   price: string;
   notes: string[];
+  // How far one bottle goes, shown beside the size. Optional.
+  servings?: string;
   // A small ribbon on the card, like "Bestseller". Optional.
   badge?: string;
 }
@@ -71,6 +73,7 @@ export const site = {
       name: 'Cold Brew',
       tagline: 'Eighteen hours of steeping in every bottle. Smooth, low acid, and ready to pour over ice.',
       size: '32 oz bottle',
+      servings: 'Makes up to 32 cups',
       price: `$${UNIT_PRICE}`,
       notes: ['Dark chocolate', 'Toasted nut', 'Smooth finish'],
     },
@@ -107,6 +110,8 @@ export const site = {
       'Add 3 oz of water',
       'Adjust to your taste preference',
     ],
+    // Shown under the steps.
+    yield: 'One 32 oz bottle makes up to 32 cups.',
   },
 
   // The "About me" section after it, before ordering. SAMPLE words: replace with the real story.

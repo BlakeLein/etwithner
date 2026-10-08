@@ -24,7 +24,10 @@ export default function Products() {
                   ))}
                 </ul>
                 <div className="product-foot">
-                  <span className="size">{product.size}</span>
+                  <span className="size">
+                    {product.size}
+                    {product.servings && <strong>{product.servings}</strong>}
+                  </span>
                   <span className="price">{product.price}</span>
                 </div>
                 <div className="product-actions">

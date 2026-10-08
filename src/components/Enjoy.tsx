@@ -19,6 +19,7 @@ export default function Enjoy() {
             </li>
           ))}
         </ol>
+        <p className="enjoy-yield">{enjoy.yield}</p>
       </div>
     </section>
   );
