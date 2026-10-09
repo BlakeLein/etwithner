@@ -101,3 +101,5 @@ and contact reasons (`etwadmin/backend/src/shop.ts`) must match `src/content/sit
 - About text and the three tasting notes are sample copy. The logo is a simple drawn mark.
 - The Venmo pay link has not been tested end to end with a real payment screen.
 - Remove the `noindex` line in `index.html` and confirm `gate.enabled` is `false` when the site is ready to be public.
+
+See `SECURITY.md` for the security standards this project follows.
