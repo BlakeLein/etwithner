@@ -46,7 +46,7 @@ variables at the top of `src/index.css`. The illustrations and logo are inline S
 Netlify builds from `main` using `netlify.toml` (`npm run build`, publish `dist/`, Node 22). A push to `main`
 deploys. **Netlify is the only host.** An older copy on the AWS server (`etwithner.blakelein.com`) and its deploy
 workflow were retired on 2026-10-09 and the address was taken off the server entirely (its nginx site and
-certificate are deleted; the DNS record may still exist and now goes nowhere). The server only hosts the admin
+certificate are deleted; the DNS record was **kept on purpose** in case this is ever restored as a staging environment, and for now it goes nowhere). The server only hosts the admin
 (`etwadmin`, at `admin.withnercoffeeco.com`), which receives orders and messages from Netlify Forms.
 
 ### If you ever host it on the server again

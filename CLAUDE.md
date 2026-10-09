@@ -13,7 +13,7 @@ by **Netlify Forms**, and the buyer is then sent to a payment app (Venmo, etc.) 
 - Live address: `https://withnercoffeeco.com` (Netlify's own address is `etwithnercoffee.netlify.app`). The site still carries `noindex` and the password gate is off
   (`gate.enabled: false`), so it is reachable by link but not searchable.
 - The old EC2 copy (`etwithner.blakelein.com`) was **retired 2026-10-09 and taken off the server entirely**: its files, deploy workflow, nginx site and
-  certificate are gone (the DNS record may remain and now goes nowhere). Netlify is the only host; the server hosts only the admin (`etwadmin`). To host it on the
+  certificate are gone (the DNS record was kept on purpose for a possible future staging environment and goes nowhere for now). Netlify is the only host; the server hosts only the admin (`etwadmin`). To host it on the
   server again, see README "If you ever host it on the server again" (the forms only work on Netlify).
 - `react-router-dom` is listed in `package.json` but not used (it is a single page).
 
