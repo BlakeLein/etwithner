@@ -12,8 +12,8 @@ by **Netlify Forms**, and the buyer is then sent to a payment app (Venmo, etc.) 
   Pushing to `main` deploys, so **commit and push only when Blake asks**.
 - Live address: `etwithner.blakelein.com`. The site still carries `noindex` and the password gate is off
   (`gate.enabled: false`), so it is reachable by link but not searchable.
-- `.github/workflows/deploy.yml` is a **legacy deploy to an EC2 server** that still runs on every push. Netlify
-  is the host now; ask Blake before changing or deleting it.
+- The old EC2 copy (`etwithner.blakelein.com`) was **retired 2026-10-09**: the server now only redirects that address to `withnercoffeeco.com`, the files and the
+  legacy deploy workflow are gone. Netlify is the only host.
 - `react-router-dom` is listed in `package.json` but not used (it is a single page).
 
 ## Commands

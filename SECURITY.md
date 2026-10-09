@@ -28,8 +28,8 @@ The master plan for the server and every app is lein-house-helper `docs/planning
 - Allowed pickup windows, payment types and prices in `src/content/site.ts` must match `etwadmin/backend/src/shop.ts`; the admin re-checks everything.
 - Security headers belong in a Netlify `_headers` file (CSP, nosniff, frame protection, referrer policy; W-7). The privacy line ("Your information is private and never sold")
   must stay true.
-- `.github/workflows/deploy.yml` is a legacy deploy to the server and should be retired along with the old copy at `etwithner.blakelein.com` (W-13, S-21).
+- The legacy server copy and its deploy workflow were retired 2026-10-09 (W-13): `etwithner.blakelein.com` only redirects to `withnercoffeeco.com`.
 
 ## Open work (plan items)
 
-Easy: headers file (W-7), form quota and spam protection (W-6), retire the legacy server copy and its workflow (W-13), package updates (2 high findings).
+Easy: headers file (W-7), form quota and spam protection (W-6), package updates (2 high findings).
