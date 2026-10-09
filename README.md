@@ -5,7 +5,7 @@ shows the product, takes orders (quantity, contact info, payment type, pickup wi
 It is a front-end app only: orders and messages are stored by Netlify Forms, and the buyer is sent on to pay
 with the total filled in.
 
-Live at `etwithner.blakelein.com`. Designed and managed by Blake Lein.
+Live at `https://withnercoffeeco.com`, hosted on Netlify (Netlify's own address is `etwithnercoffee.netlify.app`). Designed and managed by Blake Lein.
 
 ## Stack
 
@@ -44,8 +44,41 @@ variables at the top of `src/index.css`. The illustrations and logo are inline S
 ## Deploying
 
 Netlify builds from `main` using `netlify.toml` (`npm run build`, publish `dist/`, Node 22). A push to `main`
-deploys. `.github/workflows/deploy.yml` is an older deploy to an EC2 server and still runs on push; it can be
-retired once it is no longer needed.
+deploys. **Netlify is the only host.** An older copy on the AWS server (`etwithner.blakelein.com`) and its deploy
+workflow were retired on 2026-10-09 and the address was taken off the server entirely (its nginx site and
+certificate are deleted; the DNS record may still exist and now goes nowhere). The server only hosts the admin
+(`etwadmin`, at `admin.withnercoffeeco.com`), which receives orders and messages from Netlify Forms.
+
+### If you ever host it on the server again
+
+It can be done, but read the caveat first.
+
+**Caveat: the forms only work on Netlify.** The order and contact forms are Netlify Forms (`data-netlify` in
+`index.html`). On any other host the form posts fail, so a server copy shows the page but **cannot collect orders or
+messages** (visitors would only get the email fallback), and the admin would receive nothing. Hosting it elsewhere also
+means replacing the forms with something that posts to the admin directly.
+
+If you still want a copy on the server (for example as a static preview):
+
+1. Build on your own computer, never on the server: `npm install`, then `npm run build`.
+2. Copy `dist/` to the server, for example `rsync -az --delete dist/ ec2-user@<server>:/var/www/etwithner/dist/`.
+   Use a limited deploy user rather than a full-power login (see `SECURITY.md`).
+3. Add an nginx site (then `sudo nginx -t` and reload):
+
+   ```
+   server {
+       listen 80;
+       server_name <the-name>.blakelein.com;
+       root /var/www/etwithner/dist;
+       index index.html;
+       include snippets/security-headers.conf;
+       add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+       location / { try_files $uri $uri/ /index.html; }
+   }
+   ```
+4. Add the DNS record, then get a certificate: `sudo certbot --nginx -d <the-name>.blakelein.com`.
+5. Prove renewals still work: `sudo certbot renew --dry-run --cert-name <the-name>.blakelein.com`.
+6. Any redirect for that name must be a `location /` block, not a server-level `return`, or certificate renewal fails.
 
 ## Going public
 

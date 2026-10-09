@@ -10,10 +10,11 @@ by **Netlify Forms**, and the buyer is then sent to a payment app (Venmo, etc.) 
 - TypeScript, React 19, Vite 8. Plain CSS (`src/index.css`) with CSS variables. No UI library, no tests.
 - Hosted on **Netlify**, built from `main` using `netlify.toml` (`npm run build`, publish `dist/`, Node 22).
   Pushing to `main` deploys, so **commit and push only when Blake asks**.
-- Live address: `etwithner.blakelein.com`. The site still carries `noindex` and the password gate is off
+- Live address: `https://withnercoffeeco.com` (Netlify's own address is `etwithnercoffee.netlify.app`). The site still carries `noindex` and the password gate is off
   (`gate.enabled: false`), so it is reachable by link but not searchable.
-- The old EC2 copy (`etwithner.blakelein.com`) was **retired 2026-10-09**: the server now only redirects that address to `withnercoffeeco.com`, the files and the
-  legacy deploy workflow are gone. Netlify is the only host.
+- The old EC2 copy (`etwithner.blakelein.com`) was **retired 2026-10-09 and taken off the server entirely**: its files, deploy workflow, nginx site and
+  certificate are gone (the DNS record may remain and now goes nowhere). Netlify is the only host; the server hosts only the admin (`etwadmin`). To host it on the
+  server again, see README "If you ever host it on the server again" (the forms only work on Netlify).
 - `react-router-dom` is listed in `package.json` but not used (it is a single page).
 
 ## Commands

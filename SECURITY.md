@@ -28,7 +28,8 @@ The master plan for the server and every app is lein-house-helper `docs/planning
 - Allowed pickup windows, payment types and prices in `src/content/site.ts` must match `etwadmin/backend/src/shop.ts`; the admin re-checks everything.
 - Security headers belong in a Netlify `_headers` file (CSP, nosniff, frame protection, referrer policy; W-7). The privacy line ("Your information is private and never sold")
   must stay true.
-- The legacy server copy and its deploy workflow were retired 2026-10-09 (W-13): `etwithner.blakelein.com` only redirects to `withnercoffeeco.com`.
+- The legacy server copy was retired and then **offloaded from the server entirely on 2026-10-09** (W-13, W-14): files, deploy workflow, nginx site and certificate are deleted; the old
+  DNS name `etwithner.blakelein.com` may remain and goes nowhere (delete it when convenient, and always before releasing or changing the server's IP address).
 
 ## Open work (plan items)
 
